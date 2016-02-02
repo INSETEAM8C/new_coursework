@@ -4,7 +4,6 @@ INDEX VERSION 1.127+C:\Users\Jake\Documents\GitHub\new_coursework\.metadata\.plu
 2198175638.index
 558542987.index
 1903125374.index
-850170261.index
 3270612768.index
 3780086498.index
 3072622143.index
