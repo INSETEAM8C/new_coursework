@@ -1,0 +1,8 @@
+package newPackage;
+
+public class add {
+
+	public void add1(int key, String value){}
+	
+	public void add2(int dateS, int dateF, int dur){}
+}

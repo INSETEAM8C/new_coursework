@@ -22,6 +22,10 @@ package newPackage;
  * A list of all imports necessary
  */
 import java.awt.EventQueue;
+
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.List;
 import java.awt.TextArea;
 import java.awt.Toolkit;
@@ -44,19 +48,20 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 
 public class WBT_constructor{
 
 	private JFrame frame;
-
 	private JTextField txtID;
 	private JTextField txtDesc;
 	private JTextField startDate;
@@ -71,9 +76,11 @@ public class WBT_constructor{
 	private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\origDocTest.txt");
 	private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\secondaryInfo.txt");
 	private formatMethod FM = new formatMethod();
+	private mainMenu main = new mainMenu();
 	private JPanel panel_1;
 	private JButton btnHome;
 	private JButton btnCreate;
+	private add a = new add();
 	
 	/**
 	 * Set up the application
@@ -126,15 +133,19 @@ public class WBT_constructor{
 		/**
 		 * Creates the text pane responsible for providing information on all processes hosted in host files. 
 		 */		
-		//JPanel panel = new JPanel();
-		//panel.setBounds(10, 359, 1330, 162);
-		//frame.getContentPane().add(panel);
 		TextArea WBTTaskTextArea = new TextArea("Press refresh to get all info from your files.");
 		WBTTaskTextArea.setBounds(10, 359, 1330, 162);
 		WBTTaskTextArea.setEditable(false);
-		//JScrollPane scrollPane = new JScrollPane(WBTTaskTextArea);
 		frame.getContentPane().add(WBTTaskTextArea);
-		//WBTTaskTextArea.add(scrollPane);
+		
+		/**
+		 * Initiates values for combo boxes and other vital data
+		 */
+		String[] availableMetric = { "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)" };
+		JComboBox<?> dur_metric = new JComboBox<Object>(availableMetric);
+		dur_metric.setBounds(1001, 582, 70, 20);
+		frame.getContentPane().add(dur_metric);
+		
 	/**
 	 * Creates buttons for allowable actions.
 	 */
@@ -145,15 +156,75 @@ public class WBT_constructor{
 	 */
 	btnAdd = new JButton("Add task");
 	btnAdd.addActionListener(new ActionListener() {
+		// checkForCorrectness();
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
+			String IDTemp = txtID.getText();
+			String DescTemp = txtDesc.getText();
+			String start = startDate.getText();
+			String end = endDate.getText();
+			String duration = dur.getText() + " " + dur_metric.getSelectedItem().toString();
+			float ID = 0.0f;
+			JOptionPane.showMessageDialog(frame, duration.split(" "));
+			// compare the split against the other result to check if the date is correct
+			
+			/**
+			 * Performs preliminary checks on the data, and assigns variables for manipulation if:
+			 * 		- No fields are left blank
+			 * 		- No fields contain any illegal characters
+			 */
+			
+			if(IDTemp.equals("")){
+				JOptionPane.showMessageDialog(frame, "Your ID value is empty. Please enter an ID, and try again");
+				return;
+			} else { IDTemp = txtID.getText();
+			if(IDTemp.matches("[a-zA-Z]")){
+				JOptionPane.showMessageDialog(frame, "Your ID value contains letters. Please try again");
+				return;
+			} else {
+				ID = Float.parseFloat(IDTemp);
+			}}
+		if(txtDesc.getText().equals("")){
+				JOptionPane.showMessageDialog(frame, "Your description field is empty. Please try again");
+				return;
+			}
+		if(start.equals("")){
+				JOptionPane.showMessageDialog(frame, "Your start date field is empty. Please try again");
+				return;
+		} if (start.matches("[a-zA-Z]")){
+				JOptionPane.showMessageDialog(frame, "Your start date field contains letters. Please try again");
+				return;
 		}
-	});
-	// checkForCorrectness();
+		if(end.equals("")){
+				JOptionPane.showMessageDialog(frame, "Your end date field is empty. Please try again");
+				return;	
+		} if(end.matches("[a-zA-Z]")){
+			JOptionPane.showMessageDialog(frame, "Your end date field contains letters. Please try again");
+			return;
+		}
+		if(duration.equals("")){
+				JOptionPane.showMessageDialog(frame, "Your duration field is empty. Please try again");
+				return;
+		} 
+		if(a.dateCheck(end, start, duration) == false){
+			JOptionPane.showMessageDialog(frame, "there's something wrong with your dates, please try again");
+		} else {
+			int startAdd = Integer.parseInt(start);
+			int endAdd = Integer.parseInt(end);
+			int durAdd = Integer.parseInt(duration);
+			a.add1(ID, DescTemp);
+			a.add2(startAdd, endAdd, durAdd);
+		}
+		
+		}});
+	
+		// - add1(StringIDTemp, DescTemp)
+		// - check the rest of the dates, and check for correctness
+		// - find the index of the file
+		// - add to the file at the correct index
+		// - to do this (^^^), count the number of times a reader has to read over file1, then do a loop for file2 to add the rest of the
+		//   information. Look at the link on how to find a specific location in the file.s
 	btnAdd.setBounds(10, 532, 114, 23);
-	frame.getContentPane().add(btnAdd);
-	{
-}
+	frame.getContentPane().add(btnAdd);{}
 
 	/**
 	 * Responsible for saving an image of the created chart from the Jframe once it has been initialised
@@ -183,12 +254,65 @@ public class WBT_constructor{
 	 * Creates the chart for the page the user is currently on
 	 */
 	btnCreate = new JButton("Create chart");
+	btnCreate.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e){
+			
+			/**
+			 * Initialises variables responsible for creation
+			 */
+			ArrayList<Integer> numWithoutPrec = new ArrayList<Integer>();
+			ArrayList<Float> coordinates = new ArrayList<Float>();
+			int size = 0;
+			int spaceFromEdge = 0;
+			Scanner WBTscan1 = new Scanner("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\origDocTest.txt");
+			Scanner WBTscan2 = new Scanner("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\secondaryInfo.txt");
+			
+			/**
+			 * Setup for counting the number of full stops in each occurance of the variable, and updating the array with all numbers that don't have any successing full stops. 
+			 */
+			while(WBTscan1.hasNextLine()){
+				String numWithoutFull = WBTscan1.nextLine();
+				String[] numWithoutFullArr = numWithoutFull.split(",");
+				String keyVal = numWithoutFullArr[0];
+				if(countNumFullStops(keyVal) = "0"){
+					int keyValue = Integer.parseInt(keyVal);
+					numWithoutPrec.add(keyValue);
+				} else {
+					WBTscan1.nextLine();
+				}}
+			size = numWithoutPrec.size();
+			spaceFromEdge = 1000 - (size * 100) + (size - 1 * 25) / 2;
+			for(int coords=0; coords<size; coords++){
+				if(coords == 0){
+				float xToAdd = (coords * 100) + spaceFromEdge;
+				coordinates.add(xToAdd);
+				} else {
+					float xToAdd = (coords * 100) + spaceFromEdge + 25;
+					coordinates.add(xToAdd);
+				}
+				// plot();
+				// Plot the first 8 processes
+			}	
+		}});
+			// space from the edge is determined
+			// model the first process, based on the number of items without full stops
+			// plot the first three processes
+			// set up a loop over the whole file (again)
+			// plot each 'number without full stops' (based on a case statement), updating the X co-ordinate as you go
 	btnCreate.setBounds(1226, 325, 114, 23);
 	frame.getContentPane().add(btnCreate);
 	
 	btnSave.setBounds(90, 325, 114, 23);
 	frame.getContentPane().add(btnSave);
 
+	/**
+	 * Button which, when pressed, gains information stored in both the key and the info files, puts them together and displays them in a well-formatted manner
+	 * 
+	 * To be split into different methods in version 2
+	 * 
+	 * @return returns a populated text area.
+	 */
 	JButton btnRefresh_1 = new JButton("Refresh");
 	btnRefresh_1.addMouseListener(new MouseAdapter() {
 		@Override
@@ -231,6 +355,9 @@ public class WBT_constructor{
 	btnEdit.setBounds(10, 623, 114, 23);
 	frame.getContentPane().add(btnEdit);
 		
+	/**
+	 * Finds the location of a certain line in a file, and removes all information about it.
+	 */
 	JButton btnRemove = new JButton("Remove task");
 	btnRemove.addMouseListener(new MouseAdapter() {
 		@Override
@@ -242,7 +369,7 @@ public class WBT_constructor{
 	frame.getContentPane().add(btnRemove);
 	
 	/** 
-	 * Initiates text fields and descriptions
+	 * Initiates text fields and descriptions for the purposes of aesthetics.
 	 */
 	txtID = new JTextField();
 	txtID.setBounds(10, 582, 86, 20);
@@ -261,6 +388,7 @@ public class WBT_constructor{
 		
 	txtTaskId = new JTextField();
 	txtTaskId.setText("Task ID");
+	txtTaskId.setEditable(false);
 	txtTaskId.setBorder(null);
 	txtTaskId.setBackground(new Color(0,0,0,0));
 	txtTaskId.setBounds(10, 566, 86, 20);
@@ -269,6 +397,7 @@ public class WBT_constructor{
 		
 	txtDescription = new JTextField();
 	txtDescription.setText("Task description");
+	txtDescription.setEditable(false);
 	txtDescription.setBorder(null);
 	txtDescription.setBackground(new Color(0,0,0,0));
 	txtDescription.setColumns(10);
@@ -277,6 +406,7 @@ public class WBT_constructor{
 		
 	txtStartDate = new JTextField();
 	txtStartDate.setText("Start date");
+	txtStartDate.setEditable(false);
 	txtStartDate.setBorder(null);
 	txtStartDate.setBackground(new Color(0,0,0,0));
 	txtStartDate.setColumns(10);
@@ -285,6 +415,7 @@ public class WBT_constructor{
 		
 	txtEndDate = new JTextField();
 	txtEndDate.setText("End date");
+	txtEndDate.setEditable(false);
 	txtEndDate.setBorder(null);
 	txtEndDate.setBackground(new Color(0,0,0,0));
 	txtEndDate.setColumns(10);
@@ -293,6 +424,7 @@ public class WBT_constructor{
 		
 	txtDuration = new JTextField();
 	txtDuration.setText("Duration");
+	txtDuration.setEditable(false);
 	txtDuration.setBorder(null);
 	txtDuration.setBackground(new Color(0,0,0,0));
 	txtDuration.setColumns(10);
@@ -309,12 +441,9 @@ public class WBT_constructor{
 	startDate.setBounds(551, 581, 200, 21);
 	frame.getContentPane().add(startDate);
 	
-	/**
-	 * Initiates values for combo boxes and other vital data
-	 */
-	String[] availableMetric = { "Minutes", "Hours", "Days", "Weeks" };
-	JComboBox<?> dur_metric = new JComboBox<Object>(availableMetric);
-	dur_metric.setBounds(1001, 582, 70, 20);
-	frame.getContentPane().add(dur_metric);
+	public static int countNumFullStops(String keyVal){
+		numStops = StringUtils.countMatches(keyVal, ".");
+		return numStops;
 	}
 }
+	}}

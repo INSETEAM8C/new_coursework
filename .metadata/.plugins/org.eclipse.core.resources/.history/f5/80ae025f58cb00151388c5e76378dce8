@@ -1,0 +1,31 @@
+package newPackage;
+
+import java.awt.Frame;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+import javax.swing.JOptionPane;
+
+public class add {
+	
+	WBT_constructor WBT_C = new WBT_constructor();
+	
+	public boolean dateCheck(String s, String e){
+		String[] date1Test = s.split("/");
+		String[] date2Test = s.split("/");
+		if (date1Test[1].equals(date2Test[1])){
+			if(date1Test[])
+		}
+		return false;}
+	
+	public void add1(int key, String value){ try{
+		BufferedReader addWrite1 = new BufferedReader(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt"));
+	
+	}catch(Exception a1){}}
+	
+	public void add2(int dateS, int dateF, int dur){ try{
+		BufferedReader addWrite2 = new BufferedReader(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt"));
+	} catch(Exception a2){}
+}}

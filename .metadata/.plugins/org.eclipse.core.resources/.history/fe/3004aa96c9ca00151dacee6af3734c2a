@@ -1,0 +1,21 @@
+package newPackage;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
+public class add {
+	
+	
+	
+	
+	public void add1(int key, String value){ try{
+		BufferedReader addWrite1 = new BufferedReader(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt"));
+	
+	}catch(Exception a1){}}
+	
+	public void add2(int dateS, int dateF, int dur){ try{
+		BufferedReader addWrite2 = new BufferedReader(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt"));
+	} catch(Exception a1){}
+}}
