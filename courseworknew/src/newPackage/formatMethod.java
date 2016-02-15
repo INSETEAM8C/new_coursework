@@ -11,11 +11,6 @@ public class formatMethod {
 	public String format1(String k){
 		String numToSeperate = "";
 		String[] splitKey = k.split(",", 2);
-		// int math = getPhysicalSize(splitKey[1]);
-		// int numSpaces = 79 - math;
-		// for (int space = 0; space < numSpaces; space++){
-		// numToSeperate = numToSeperate + " ";}
-		// splitKey[1] = "        " + splitKey[1] + numToSeperate;
 		int numSpaces = 79 - splitKey[1].length();
 		for(int space = 0; space < numSpaces; space++){
 		numToSeperate = numToSeperate + " ";}

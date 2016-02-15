@@ -1,5 +1,5 @@
 /** This class is responsible for creating the WBT 
- * @ Author: Jake Hedges
+ * @ Author: 
  * @ Version: 1.0 - button functionality.
  * 
  * Changes to be made for version 1.1:
@@ -26,6 +26,7 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.HeadlessException;
 import java.awt.List;
 import java.awt.TextArea;
 import java.awt.Toolkit;
@@ -44,6 +45,10 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+
+import org.apache.commons.lang3.StringUtils;
+
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
@@ -53,11 +58,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JButton;
+
+//import org.apache.commons.lang.StringUtils;
 
 public class WBT_constructor{
 
@@ -73,14 +81,17 @@ public class WBT_constructor{
 	private JTextField txtEndDate;
 	private JTextField txtDuration;
 	private JButton btnAdd;
-	private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\origDocTest.txt");
-	private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\secondaryInfo.txt");
+	private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt");
+	private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt");
+	private String file1 = origFile.toString();
+	private String file2 = infoFile.toString();
 	private formatMethod FM = new formatMethod();
 	private mainMenu main = new mainMenu();
 	private JPanel panel_1;
 	private JButton btnHome;
 	private JButton btnCreate;
 	private add a = new add();
+	private Graphics g;
 	
 	/**
 	 * Set up the application
@@ -94,9 +105,7 @@ public class WBT_constructor{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-		});
-	}
+			}});}
 
 	/**
 	 * Launch the application.
@@ -114,8 +123,10 @@ public class WBT_constructor{
 		/**
 		 * Initialises variables and formatted text variables
 		 */		
+		//JScrollPane pane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		frame = new JFrame("WBT creator");
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+		//frame.setContentPane(pane);
 		frame.getContentPane().setBackground(new Color(153, 180, 209));
 		frame.setBounds(0, 0, size.width, size.height-40);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,9 +135,8 @@ public class WBT_constructor{
 	/**
 	 * Creates the JPanel responsible for showing the user the graph
 	 */		
-		JPanel WBTpanel = new JPanel();
-		WBTpanel.setBounds(10, 10, 1330, 304);
-		WBTpanel.setBackground(Color.gray);
+		rectCreate WBTpanel = new rectCreate();
+		WBTpanel.setBounds(10, 11, 1330, 304);
 		frame.getContentPane().add(WBTpanel);
 		WBTpanel.setAutoscrolls(true);
 		
@@ -164,7 +174,6 @@ public class WBT_constructor{
 			String end = endDate.getText();
 			String duration = dur.getText() + " " + dur_metric.getSelectedItem().toString();
 			float ID = 0.0f;
-			JOptionPane.showMessageDialog(frame, duration.split(" "));
 			// compare the split against the other result to check if the date is correct
 			
 			/**
@@ -205,17 +214,24 @@ public class WBT_constructor{
 				JOptionPane.showMessageDialog(frame, "Your duration field is empty. Please try again");
 				return;
 		} 
-		if(a.dateCheck(end, start, duration) == false){
+		if(a.checkForCorrectness(start, end, duration) == false){
 			JOptionPane.showMessageDialog(frame, "there's something wrong with your dates, please try again");
 		} else {
-			int startAdd = Integer.parseInt(start);
-			int endAdd = Integer.parseInt(end);
-			int durAdd = Integer.parseInt(duration);
-			a.add1(ID, DescTemp);
-			a.add2(startAdd, endAdd, durAdd);
-		}
-		
-		}});
+			try {
+				if(a.placeCheck(ID, DescTemp, file1, file2) == false){
+					JOptionPane.showMessageDialog(frame, "That already exists. Please use the 'edit' button if you wish to edit. ");
+				}
+			} catch (FileNotFoundException e1) {}
+			//a.add1(ID, DescTemp);
+			//a.add2(start, end, duration);
+ catch (HeadlessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}}});
 	
 		// - add1(StringIDTemp, DescTemp)
 		// - check the rest of the dates, and check for correctness
@@ -252,54 +268,125 @@ public class WBT_constructor{
 	
 	/**
 	 * Creates the chart for the page the user is currently on
+	 * @version version 1 - with bugs
 	 */
 	btnCreate = new JButton("Create chart");
 	btnCreate.addMouseListener(new MouseAdapter() {
+		@SuppressWarnings("resource")
 		@Override
 		public void mouseClicked(MouseEvent e){
 			
 			/**
 			 * Initialises variables responsible for creation
 			 */
-			ArrayList<Integer> numWithoutPrec = new ArrayList<Integer>();
+			ArrayList<String> WithoutPrecInfo = new ArrayList<String>();
+			ArrayList<String> withFullStopsInfo = new ArrayList<String>();
+			ArrayList<String> numWithoutPrec = new ArrayList<String>();
+			ArrayList<String> afterFullStops = new ArrayList<String>();
+			ArrayList<String> numWithoutPrecFloat = new ArrayList<String>();
+			ArrayList<String> afterFullStopsFloat = new ArrayList<String>();
 			ArrayList<Float> coordinates = new ArrayList<Float>();
-			int size = 0;
-			int spaceFromEdge = 0;
-			Scanner WBTscan1 = new Scanner("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\origDocTest.txt");
-			Scanner WBTscan2 = new Scanner("C:\\Users\\Jake\\Documents\\GitHub\\coursework\\8C_Charts\\coursework\\Test files\\secondaryInfo.txt");
+			int oneCount = 0, twoCount = 0, threeCount = 0, fourCount = 0, fiveCount = 0, sixCount = 0, sevenCount = 0, eightCount = 0, nineCount = 0, size = 0, spaceFromEdge = 0;
+		//	float keyInput;
 			
 			/**
 			 * Setup for counting the number of full stops in each occurance of the variable, and updating the array with all numbers that don't have any successing full stops. 
+			 * Test for validation
 			 */
-			while(WBTscan1.hasNextLine()){
-				String numWithoutFull = WBTscan1.nextLine();
-				String[] numWithoutFullArr = numWithoutFull.split(",");
-				String keyVal = numWithoutFullArr[0];
-				if(countNumFullStops(keyVal) = "0"){
-					int keyValue = Integer.parseInt(keyVal);
-					numWithoutPrec.add(keyValue);
+
+			try{
+				String currentLine;
+				BufferedReader WBTscan1 = new BufferedReader(new FileReader(file1));
+				BufferedReader WBTscan2 = new BufferedReader(new FileReader(file2));
+				while((currentLine = WBTscan1.readLine()) != null){
+					String numWithoutFull = WBTscan1.readLine();
+					String[] numWithoutFullArr = numWithoutFull.split(",");
+					String keyVal = numWithoutFullArr[0];
+					if(a.countNumFullStops(keyVal) == 0){
+					//keyInput = Float.parseFloat(keyVal);
+						numWithoutPrec.add(keyVal);
+					//numWithoutPrecFloat.add(keyVal);
+						WithoutPrecInfo.add(numWithoutFullArr[1]);
+					} else if(a.countNumFullStops(keyVal) >= 1){
+					if(a.countNumFullStops(keyVal) <= 5){
+					//keyInput = Float.parseFloat(keyVal);
+					afterFullStops.add(keyVal);
+					//afterFullStopsFloat.add(keyVal);
+					withFullStopsInfo.add(numWithoutFullArr[1]);
+					}
 				} else {
-					WBTscan1.nextLine();
-				}}
+					JOptionPane.showMessageDialog(frame, "You have exceeded the maximum number of full stops in one of your tasks" + " " + keyVal + " Please correct this and retry.");
+						}
+			}} catch(FileNotFoundException fe){} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			size = numWithoutPrec.size();
-			spaceFromEdge = 1000 - (size * 100) + (size - 1 * 25) / 2;
+			int tempx = 0;
+			spaceFromEdge = 1000 - (size * 100) - (size - 1 * 25) / 2;
 			for(int coords=0; coords<size; coords++){
 				if(coords == 0){
-				float xToAdd = (coords * 100) + spaceFromEdge;
-				coordinates.add(xToAdd);
-				} else {
-					float xToAdd = (coords * 100) + spaceFromEdge + 25;
+					float xToAdd = (coords * 100) + spaceFromEdge;
 					coordinates.add(xToAdd);
+					} else {
+						float xToAdd = (coords * 100) + spaceFromEdge + 25;
+						coordinates.add(xToAdd);
+						}};
+						
+			for(int pl0=0; pl0<size; pl0++){
+				int rounded = Math.round(coordinates.get(pl0));
+				WBTpanel.paint(g, rounded, 100, "jidsj");
+			//plot(coordinates[pl0], 125, coordinates[pl0] + 100, 225)
+			//add text to rectangle
+			//show
+			}
+			
+			for(int pl1=0; pl1<afterFullStops.size(); pl1++){
+				String prePlot = afterFullStops.get(pl1);
+				String infoPlot = withFullStopsInfo.get(pl1);
+				char preTest = prePlot.charAt(0);
+				int globalOne;
+				switch (preTest) {
+					case 1: oneCount += 1;
+							globalOne = oneCount;
+					case 2: twoCount += 1;
+							globalOne = twoCount;
+					case 3: threeCount += 1;
+							globalOne = threeCount;
+					case 4: fourCount += 1;
+							globalOne = fourCount;
+					case 5: fiveCount += 1;
+							globalOne = fiveCount;
+					case 6: sixCount += 1;
+							globalOne = sixCount;
+					case 7: sevenCount += 1;
+							globalOne = sevenCount;
+					case 8: eightCount += 1;
+							globalOne = eightCount;
+					case 9: nineCount += 1;
+							globalOne = nineCount;
+				break;
 				}
-				// plot();
-				// Plot the first 8 processes
-			}	
-		}});
-			// space from the edge is determined
-			// model the first process, based on the number of items without full stops
-			// plot the first three processes
-			// set up a loop over the whole file (again)
-			// plot each 'number without full stops' (based on a case statement), updating the X co-ordinate as you go
+				
+				switch (a.countNumFullStops(prePlot)) {
+					case 1: tempx += 0;
+					case 2: tempx += 5;
+					case 3: tempx += 10;
+					case 4: tempx += 15;
+					case 5: tempx += 20;
+				break;
+				}
+				
+				WBTpanel.paint(g, 10, 10, "jidsj");
+				//plot(coordinates[preTest] + tempx, globalOne * 100 + 25, coordinates[preTest] + tempx + 100, globalOne * 100 + 125)
+				//add text to rectangle
+				//show
+				globalOne = 0;
+			}
+			}
+	});
+			
 	btnCreate.setBounds(1226, 325, 114, 23);
 	frame.getContentPane().add(btnCreate);
 	
@@ -439,11 +526,20 @@ public class WBT_constructor{
 	startDate = new JTextField();
 	startDate.setColumns(10);
 	startDate.setBounds(551, 581, 200, 21);
-	frame.getContentPane().add(startDate);
-	
-	public static int countNumFullStops(String keyVal){
-		numStops = StringUtils.countMatches(keyVal, ".");
-		return numStops;
+	frame.getContentPane().add(startDate);}
+
+class rectCreate extends JPanel
+{
+	public rectCreate()
+	{
+		setSize(500, 500);
+		setVisible(true);
 	}
-}
-	}}
+	
+	public void paint(Graphics g, int x, int y, String info)
+	{
+		super.paint(g);
+		g.drawRect(x,y,100,100);
+		g.setColor(Color.black);
+		g.drawString(info, x, y);
+	}}}
