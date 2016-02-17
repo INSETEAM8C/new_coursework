@@ -1,7 +1,7 @@
 package newPackage;
 
 import java.awt.Frame;
-
+import java.awt.image.BufferedImageFilter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Array;
 import java.util.Scanner;
 import org.apache.commons.*;
 import org.apache.commons.lang3.StringUtils;
@@ -70,27 +71,29 @@ public class add {
 		int numStops = StringUtils.countMatches(keyVal, ".");
 		return numStops;}
 	
-	public boolean placeCheck(float ID, String desc, String file1, String file2) throws IOException{
-		Scanner checkNumber = new Scanner(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt"));
+	public boolean placeCheck(String ID, String desc, String file1, String file2) throws IOException{
+		Scanner checkNumber = new Scanner(new FileReader(file1));
+		
 		String toTest;
-        String[] splitter;
-        int filePosCounter = 0;
+		boolean trueOrNo = true;
 		while(checkNumber.hasNext()){
 	        toTest = checkNumber.next();
-	        float floatTest = Float.parseFloat(toTest);
 	        if(toTest.equals(ID)){
-	        	return false;
+	       	trueOrNo = false;
+	       	break;
 	        } else { 
-	        	addInfo(ID, desc, file1, file2);
-	        }
+	       	addInfo(ID, desc, file1, file2);
+	      }
 	}
-		return false;
+		return trueOrNo;
 	}
 	
-	public void addInfo (float ID, String desc, String file1, String file2) throws IOException{
+	public void addInfo (String ID, String desc, String file1, String file2) throws IOException{
     int filePosCounter = 0;
 	Scanner checkNumber = new Scanner(new FileReader(file1));
-	RandomAccessFile fileToEdit = new RandomAccessFile(new File(file1), "rw");
+	ArrayList<String> key = new ArrayList<String>();
+	ArrayList<String> info = new ArrayList<String>();
+	String sentInt = "";
 	
 	/**
 	 * Checks to see if the data data already exists in the file.
@@ -99,17 +102,18 @@ public class add {
         String testPlaceHolder = checkNumber.next();
         String[] splitter = testPlaceHolder.split(",");
 		String toTest = splitter[0];
-		float firstChar = Float.parseFloat(testPlaceHolder);
         int numStops = countNumFullStops(toTest);
         /**
          * Break if duplicate entries are found
          */
-        if(ID == firstChar){
-			if(numStops == 0){
+        if(ID.equals(toTest)){
         	break;
-        	}} else { 
-			ArrayList<String> key = new ArrayList<String>();
-			ArrayList<String> info = new ArrayList<String>();
+        }
+	}
+	
+		/**
+		 * Initialises variables once checking has completed
+		 */
 			BufferedReader b1 = new BufferedReader(new FileReader(file1));
 			BufferedReader b2 = new BufferedReader(new FileReader(file2));
 			String keyLine;
@@ -121,23 +125,27 @@ public class add {
 				info.add(infoLine);
 			}
 			
-			String sentInt;
 			filePosCounter += 1;
-			String IDTest = Float.toString(ID);
-			String[] identifier = IDTest.split(".");
-			int numToTest = Integer.parseInt(identifier[identifier.length-1]);
-			int numStop = countNumFullStops(IDTest);
-			String PreceedingString;
+			String[] identifier = ID.split("\\.");
+			String numToTest = identifier[identifier.length-1];
+			int numStop = countNumFullStops(ID);
 			int Sentsize = identifier.length;
 			switch(numStop){
 			case 0: sentInt = identifier[Sentsize];
+					break;
 			case 1: sentInt = identifier[Sentsize-1];
+					break;
 			case 2: sentInt = identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+					break;
 			case 3: sentInt = identifier[Sentsize-3] + "." + identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+					break;
 			case 4: sentInt = identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+					break;
 			case 5: sentInt = identifier[Sentsize-5] + "." + identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+					break;
+			}
 			
-			if(numToTest == 1){
+			if(numToTest.equals(1)){
 				for(int add=0; add<key.size(); add++){
 					filePosCounter += 1;
 					String lineToTest = key.get(add);
@@ -150,62 +158,69 @@ public class add {
 					int stopsToTest = countNumFullStops(lineToTest);
 					switch(stopsToTest){
 					case 0: testerInt = identifier[size];
+							break;
 					case 1: testerInt = identifier[size-1];
+							break;
 					case 2: testerInt = identifier[size-2] + "." + identifier[size-1];
+							break;
 					case 3: testerInt = identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
+							break;
 					case 4: testerInt = identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
+							break;
 					case 5: testerInt = identifier[size-5] + "." + identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
+							break;
 					}
-					if(testerInt == sentInt){
+					if(testerInt.equals(sentInt)){
 						key.add(filePosCounter+1, testerInt);
 						info.add(filePosCounter+1, desc);
+						// add rest of info
+						
 					}
 					identifier = null;
 					tester = null;
 				}
 			}
 			
-			if(numToTest > 1){
-				for(int add=0; add<key.size(); add++){
+			try{
+				BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
+			for(int add=0; add<key.size(); add++){
+				writer.write(key.get(add) + ", " + info.get(add) + "\n");
+			}
+			writer.close();
+			} catch(IOException ex){}
+			
+			// DO THIS
+			// FIGURE OUT WHY IT'S NOT WRITING TO A FILE
+			if(!numToTest.equals(1)){
+					for(int add=0; add<key.size(); add++){
 					String lineToTest = key.get(add);
 					int testerInt;
 					String[] tester = lineToTest.split(",", 2);
 					String identifierTemp = tester[0];
-					String[] identifierTest = identifierTemp.split(".");
+					String[] identifierTest = identifierTemp.split("\\.");
 					int size = identifier.length;
 					int digitToTest = Integer.parseInt(identifier[size-1]);
 					int stopsToTest = countNumFullStops(lineToTest);
 					switch(stopsToTest){
 					case 0: testerInt = Integer.parseInt(identifier[size]);
+							break;
 					case 1: testerInt = Integer.parseInt(identifier[size-1]);
+							break;
 					case 2: testerInt = Integer.parseInt(identifier[size-2] + "." + identifier[size-1]);
+							break;
 					case 3: testerInt = Integer.parseInt(identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1]);
+							break;
 					case 4: testerInt = Integer.parseInt(identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1]);
+							break;
 					case 5: testerInt = Integer.parseInt(identifier[size-5] + "." + identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1]);
+							break;
 					}
 					identifier = null;
 					tester = null;
-				}
-				
-				//ArrayList<String, String> writeB = new ArrayList<String, String>;
-				//FileWriter writeBack = new FileWriter(file1);
-				//for
-				}
-			
-			
-			
-	
-			// Else go to the next line, update the filePosCounter and check to see if the information can be added
-			// Add the information at a specific line in the file (using randomAccessFile)
-			// If number of full stops is greater than 0
-			
-			
-     //   else if(firstChar.equals(toTest)){
-       // 	if(numStops >= 1){
-        		// add it on the line where it belongs
-      //  }}}
-	
-	//public void add2(String dateS, String dateF, String dur, String file2){ try{
-	//	BufferedReader addWrite2 = new BufferedReader(new FileReader(file2));
-	//} catch(Exception a2){}
-}}}}}
+				}}try{
+					BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
+					for(int add=0; add<key.size(); add++){
+						writer.write(key.get(add) + ", " + info.get(add) + "\n");
+					}
+					writer.close();
+					} catch(IOException ex){}}}

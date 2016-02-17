@@ -168,12 +168,11 @@ public class WBT_constructor{
 	btnAdd.addActionListener(new ActionListener() {
 		// checkForCorrectness();
 		public void actionPerformed(ActionEvent e) {
-			String IDTemp = txtID.getText();
+			String ID = txtID.getText();
 			String DescTemp = txtDesc.getText();
 			String start = startDate.getText();
 			String end = endDate.getText();
 			String duration = dur.getText() + " " + dur_metric.getSelectedItem().toString();
-			float ID = 0.0f;
 			// compare the split against the other result to check if the date is correct
 			
 			/**
@@ -182,15 +181,13 @@ public class WBT_constructor{
 			 * 		- No fields contain any illegal characters
 			 */
 			
-			if(IDTemp.equals("")){
+			if(ID.equals("")){
 				JOptionPane.showMessageDialog(frame, "Your ID value is empty. Please enter an ID, and try again");
 				return;
-			} else { IDTemp = txtID.getText();
-			if(IDTemp.matches("[a-zA-Z]")){
+			} else { ID = txtID.getText();
+			if(ID.matches("[a-zA-Z]")){
 				JOptionPane.showMessageDialog(frame, "Your ID value contains letters. Please try again");
 				return;
-			} else {
-				ID = Float.parseFloat(IDTemp);
 			}}
 		if(txtDesc.getText().equals("")){
 				JOptionPane.showMessageDialog(frame, "Your description field is empty. Please try again");
@@ -220,6 +217,8 @@ public class WBT_constructor{
 			try {
 				if(a.placeCheck(ID, DescTemp, file1, file2) == false){
 					JOptionPane.showMessageDialog(frame, "That already exists. Please use the 'edit' button if you wish to edit. ");
+				} else {
+					JOptionPane.showMessageDialog(frame, "Great. That's been added. ");
 				}
 			} catch (FileNotFoundException e1) {}
 			//a.add1(ID, DescTemp);
