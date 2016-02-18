@@ -1,5 +1,3 @@
-package newPackage;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;

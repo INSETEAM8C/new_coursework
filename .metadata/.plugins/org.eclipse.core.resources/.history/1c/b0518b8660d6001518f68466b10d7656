@@ -1,0 +1,15 @@
+import java.util.ArrayList;
+
+public class rectTester {
+	public static void main (String[] args){
+		ArrayList<String> = new ArrayList<String>();
+		
+		rectTest r = new rectTest();
+		rectTest.drawRect rec = r.new drawRect();
+		for(int x; x<10; x++){
+		int x = x*10;
+		int y = x*10;
+		int z = x*10;
+		String temp = "jdjdjd";
+		rec.addRectangle(x, y, z, temp);
+	}}}

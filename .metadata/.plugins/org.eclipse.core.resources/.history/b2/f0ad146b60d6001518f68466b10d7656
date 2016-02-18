@@ -1,0 +1,11 @@
+public class rectTester {
+	public static void main (String[] args){
+		rectTest r = new rectTest();
+		rectTest.drawRect rec = r.new drawRect();
+		int x = 0;
+		int y = 0;
+		int z = 75;
+		String temp = "jdjdjd";
+		rec.addRectangle(x, y, z, temp);
+	}
+}

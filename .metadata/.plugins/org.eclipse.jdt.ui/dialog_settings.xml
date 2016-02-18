@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item value="false" key="TypeHierarchyViewPart.qualifiednames"/>
+	<item value="3" key="TypeHierarchyViewPart.orientation"/>
+	<item value="false" key="TypeHierarchyViewPart.linkeditors"/>
 	<item value="C:\Users\Jake\Documents\GitHub\new_coursework\courseworknew\src\Java_lang_for_StringUtils-2016-02-09\Java lang for StringUtils\commons-lang3-3.4" key="org.eclipse.jdt.ui.lastextjar"/>
-	<item value="C:\Users\Jake\Documents\GitHub\new_coursework\courseworknew\src\commons-lang3-3.4-src\commons-lang3-3.4-src\src" key="org.eclipse.jdt.ui.last.external.project"/>
+	<item value="2" key="TypeHierarchyViewPart.hierarchyview"/>
+	<item value="C:\Users\Jake\Documents\GitHub\new_coursework\courseworknew\src\newPackage" key="org.eclipse.jdt.ui.last.external.project"/>
 	<section name="org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart">
 		<item value="2" key="layout"/>
 		<item value="true" key="group_libraries"/>
@@ -22,7 +26,7 @@
 		<item value="false" key="create_package_info_java"/>
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item value="2" key="pageIndex"/>
+		<item value="0" key="pageIndex"/>
 	</section>
 	<section name="completion_proposal_size">
 	</section>

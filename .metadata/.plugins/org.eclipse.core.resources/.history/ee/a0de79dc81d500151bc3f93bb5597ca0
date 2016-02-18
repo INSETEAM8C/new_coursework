@@ -1,0 +1,8 @@
+public class fileTest {
+		
+		arrayList<String> ar = new arrayList<String>();
+		
+		public void add(){
+			
+		}
+	}

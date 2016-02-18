@@ -1,0 +1,101 @@
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.Panel;
+import java.awt.ScrollPane;
+import javax.swing.JScrollPane;
+
+public class rectTest{
+
+	private JFrame frame;
+	private rectTester r;
+	private int xTemp, yTemp, zTemp;
+	private Graphics g;
+	private String iTemp;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					rectTest window = new rectTest();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public rectTest() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		drawRect panel = new drawRect();
+		panel.setBounds(0, 0, 450, 300);
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().add(panel);
+		frame.setVisible(true);
+	}
+	
+	class drawRect extends JPanel
+	{
+		public String myMessage = "";
+		public drawRect()
+		{
+			setSize(500, 500);
+			setVisible(true);
+		}
+	
+	public void addRectangle(int x, int y, int z, String i){
+		xTemp = x;
+		yTemp = y;
+		zTemp = z;
+		iTemp = i;
+		this.update(g)
+	}
+	
+	public int getX(){
+		return xTemp;
+	}
+	
+	public int getY(){
+		return yTemp;
+	}
+	
+	public int getZ(){
+		return zTemp;
+	}
+	
+	public String getI(){
+		return iTemp;
+	}
+		
+	public void paint(Graphics g)
+	{
+		int x1 = getX();
+		int y1 = getY();
+		int z1 = getZ();
+		String i1 = getI();
+		g.drawRect(x1, y1, z1, z1);
+		g.setColor(Color.black);
+		g.drawString(i1, (x1+35), (y1+35));
+	}
+	}
+	}

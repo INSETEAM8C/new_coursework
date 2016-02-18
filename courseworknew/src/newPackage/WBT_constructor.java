@@ -16,8 +16,6 @@
 // - Create testing class
 // - Upload to GitHub
 
-package newPackage;
-
 /**
  * A list of all imports necessary
  */
@@ -295,11 +293,10 @@ public class WBT_constructor{
 
 			try{
 				String currentLine;
-				BufferedReader WBTscan1 = new BufferedReader(new FileReader(file1));
-				BufferedReader WBTscan2 = new BufferedReader(new FileReader(file2));
+				BufferedReader WBTscan1 = new BufferedReader(new FileReader(origFile));
+				BufferedReader WBTscan2 = new BufferedReader(new FileReader(infoFile));
 				while((currentLine = WBTscan1.readLine()) != null){
-					String numWithoutFull = WBTscan1.readLine();
-					String[] numWithoutFullArr = numWithoutFull.split(",");
+					String[] numWithoutFullArr = currentLine.split(",", 2);
 					String keyVal = numWithoutFullArr[0];
 					if(a.countNumFullStops(keyVal) == 0){
 					//keyInput = Float.parseFloat(keyVal);
@@ -321,15 +318,16 @@ public class WBT_constructor{
 				e1.printStackTrace();
 			}
 			
-			size = numWithoutPrec.size();
 			int tempx = 0;
-			spaceFromEdge = 1000 - (size * 100) - (size - 1 * 25) / 2;
+			float xToAdd = 0.0f;
+			size = numWithoutPrec.size();
+			spaceFromEdge = ((1000 - (size * 100) - (size - 1) * 25)) / 2;
 			for(int coords=0; coords<size; coords++){
 				if(coords == 0){
-					float xToAdd = (coords * 100) + spaceFromEdge;
+					xToAdd = (coords * 100) + spaceFromEdge;
 					coordinates.add(xToAdd);
 					} else {
-						float xToAdd = (coords * 100) + spaceFromEdge + 25;
+						xToAdd = (coords * 25 + ((coords * 100) + spaceFromEdge));
 						coordinates.add(xToAdd);
 						}};
 						
@@ -408,8 +406,8 @@ public class WBT_constructor{
 		try{
 			ArrayList<String> key = new ArrayList<String>();
 			ArrayList<String> info = new ArrayList<String>();
-			BufferedReader b1 = new BufferedReader(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt"));
-			BufferedReader b2 = new BufferedReader(new FileReader("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt"));
+			BufferedReader b1 = new BufferedReader(new FileReader(origFile));
+			BufferedReader b2 = new BufferedReader(new FileReader(infoFile));
 			String keyLine;
 			String infoLine;
 			while((keyLine = b1.readLine()) != null){
@@ -459,16 +457,19 @@ public class WBT_constructor{
 	 */
 	txtID = new JTextField();
 	txtID.setBounds(10, 582, 86, 20);
+	txtID.setText("2.1");
 	frame.getContentPane().add(txtID);
 	txtID.setColumns(10);
 		
 	txtDesc = new JTextField();
 	txtDesc.setColumns(10);
+	txtDesc.setText("do a thing for a test");
 	txtDesc.setBounds(116, 582, 425, 20);
 	frame.getContentPane().add(txtDesc);
 		
 	dur = new JTextField();
 	dur.setColumns(10);
+	dur.setText("1");
 	dur.setBounds(969, 581, 32, 21);
 	frame.getContentPane().add(dur);
 		
@@ -520,11 +521,13 @@ public class WBT_constructor{
 	endDate = new JTextField();
 	endDate.setColumns(10);
 	endDate.setBounds(759, 581, 200, 21);
+	endDate.setText("16/04/2016");
 	frame.getContentPane().add(endDate);			
 		
 	startDate = new JTextField();
 	startDate.setColumns(10);
 	startDate.setBounds(551, 581, 200, 21);
+	startDate.setText("16/04/2016");
 	frame.getContentPane().add(startDate);}
 
 class rectCreate extends JPanel
@@ -537,7 +540,7 @@ class rectCreate extends JPanel
 	
 	public void paint(Graphics g, int x, int y, String info)
 	{
-		super.paint(g);
+		this.paint(g);
 		g.drawRect(x,y,100,100);
 		g.setColor(Color.black);
 		g.drawString(info, x, y);

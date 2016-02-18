@@ -1,5 +1,3 @@
-package newPackage;
-
 public class formatMethod {
 
 	/**

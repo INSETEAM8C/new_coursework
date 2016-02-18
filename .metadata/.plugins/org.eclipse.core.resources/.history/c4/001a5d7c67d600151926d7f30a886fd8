@@ -1,0 +1,84 @@
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import java.awt.Panel;
+import java.awt.ScrollPane;
+import java.util.ArrayList;
+
+import javax.swing.JScrollPane;
+
+public class rectTest{
+
+	private JFrame frame;
+	private rectTester r;
+	private int xTemp, yTemp, zTemp;
+	private Graphics g;
+	private String iTemp;
+	ArrayList<Integer> ID = new ArrayList<Integer>();
+	ArrayList<Integer> coord = new ArrayList<Integer>();
+	ArrayList<String> desc = new ArrayList<String>();
+	private int size;
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					rectTest window = new rectTest();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public rectTest() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		drawRect panel = new drawRect();
+		panel.setBounds(0, 0, 450, 300);
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().add(panel);
+		frame.setVisible(true);
+	}
+	
+	public void 
+	
+	class drawRect extends JPanel
+	{
+		public String myMessage = "";
+		public drawRect()
+		{
+			setSize(500, 500);
+			setVisible(true);
+		}
+		
+	public void paint(Graphics g)
+	{
+		for(int i=0; i<10; i++){
+		String i1 = getI();
+		g.drawRect(x1, y1, z1, z1);
+		g.setColor(Color.black);
+		g.drawString(i1, (x1+35), (y1+35));
+	}
+	}
+	}
+	}

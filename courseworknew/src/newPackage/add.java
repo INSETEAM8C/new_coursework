@@ -1,5 +1,3 @@
-package newPackage;
-
 import java.awt.Frame;
 import java.awt.image.BufferedImageFilter;
 import java.io.BufferedReader;
@@ -21,6 +19,13 @@ import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 public class add {
+	
+	// ADD TO INFO FILE
+	
+	// THINGS THAT THIS NEEDS TO DO IN V2:
+	// Fix refresh
+	// Add functionality for .2 files, etc. 
+	
 	
 	/** 
 	 * Checks to see if the year is the same. If it is not, check to see if the finish date is greater than the start. If not, fail.
@@ -67,49 +72,36 @@ public class add {
 		return false;
 	}
 	
-	public int countNumFullStops(String keyVal){
-		int numStops = StringUtils.countMatches(keyVal, ".");
+	public int countNumFullStops(String s){
+		int numStops = StringUtils.countMatches(s, ".");
 		return numStops;}
 	
+	/**
+	 * Checks to see if the data supplied already exists in the file.
+	 */
 	public boolean placeCheck(String ID, String desc, String file1, String file2) throws IOException{
 		Scanner checkNumber = new Scanner(new FileReader(file1));
-		
 		String toTest;
 		boolean trueOrNo = true;
 		while(checkNumber.hasNext()){
-	        toTest = checkNumber.next();
-	        if(toTest.equals(ID)){
+			toTest = checkNumber.next();
+	        if(toTest.contains(ID)){
 	       	trueOrNo = false;
 	       	break;
-	        } else { 
+	        }}
 	       	addInfo(ID, desc, file1, file2);
+			return trueOrNo;
 	      }
-	}
-		return trueOrNo;
-	}
-	
+
 	public void addInfo (String ID, String desc, String file1, String file2) throws IOException{
     int filePosCounter = 0;
+    String keyInfo =  ID + ", " + "\"" + desc + "\"" ;
 	Scanner checkNumber = new Scanner(new FileReader(file1));
 	ArrayList<String> key = new ArrayList<String>();
 	ArrayList<String> info = new ArrayList<String>();
+	ArrayList<String> valueOfSent = new ArrayList<String>();
+
 	String sentInt = "";
-	
-	/**
-	 * Checks to see if the data data already exists in the file.
-	 */
-	while(checkNumber.hasNext()){
-        String testPlaceHolder = checkNumber.next();
-        String[] splitter = testPlaceHolder.split(",");
-		String toTest = splitter[0];
-        int numStops = countNumFullStops(toTest);
-        /**
-         * Break if duplicate entries are found
-         */
-        if(ID.equals(toTest)){
-        	break;
-        }
-	}
 	
 		/**
 		 * Initialises variables once checking has completed
@@ -118,6 +110,7 @@ public class add {
 			BufferedReader b2 = new BufferedReader(new FileReader(file2));
 			String keyLine;
 			String infoLine;
+			String testerInt = null;
 			while((keyLine = b1.readLine()) != null){
 				key.add(keyLine);
 			}
@@ -125,39 +118,75 @@ public class add {
 				info.add(infoLine);
 			}
 			
+			/**
+			 * Gathers sentinel value to test the rest of the items's ID with
+			 */
 			filePosCounter += 1;
 			String[] identifier = ID.split("\\.");
+			int size = identifier.length;
 			String numToTest = identifier[identifier.length-1];
 			int numStop = countNumFullStops(ID);
 			int Sentsize = identifier.length;
 			switch(numStop){
-			case 0: sentInt = identifier[Sentsize];
+			case 0: sentInt = identifier[Sentsize-1];
 					break;
-			case 1: sentInt = identifier[Sentsize-1];
+			case 1: sentInt = identifier[Sentsize-2];
 					break;
-			case 2: sentInt = identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+			case 2: sentInt = identifier[Sentsize-3] + "." + identifier[Sentsize-2];
 					break;
-			case 3: sentInt = identifier[Sentsize-3] + "." + identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+			case 3: sentInt = identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2];
 					break;
-			case 4: sentInt = identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+			case 4: sentInt = identifier[Sentsize-5] + "." + identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2];
 					break;
-			case 5: sentInt = identifier[Sentsize-5] + "." + identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2] + "." + identifier[Sentsize-1];
+			case 5: sentInt = identifier[Sentsize-6] + "." + identifier[Sentsize-5] + "." + identifier[Sentsize-4] + "." + identifier[Sentsize-3] + "." + identifier[Sentsize-2];
 					break;
 			}
 			
-			if(numToTest.equals(1)){
-				for(int add=0; add<key.size(); add++){
+			/**
+			 * Compares each item saved in a list to the sentinel variable of the first digit of the ID, having that the numToTest (end digit) is equal to 1
+			 */
+			if(numToTest.equals("1")){
+				int test = key.size();
+				for(int add=0; add<test; add++){
 					filePosCounter += 1;
 					String lineToTest = key.get(add);
-					String testerInt = null;
-					String[] tester = lineToTest.split(",", 2);
-					String identifierTemp = tester[0];
-					String[] identifierTest = identifierTemp.split(".");
-					int size = identifier.length;
-					int digitToTest = Integer.parseInt(identifier[size-1]);
+					String[] identifierFor1 = lineToTest.split(",");
+					String IDTest = identifierFor1[0];
+					String[] split = IDTest.split("\\.");
+					int size1 = split.length;
 					int stopsToTest = countNumFullStops(lineToTest);
 					switch(stopsToTest){
-					case 0: testerInt = identifier[size];
+					case 0: testerInt = split[size1-1];
+							break;
+					case 1: testerInt = split[size1-2];
+							break;
+					case 2: testerInt = split[size1-3] + "." + split[size1-2];
+							break;
+					case 3: testerInt = split[size1-3] + "." + split[size1-2] + "." + split[size1-1];
+							break;
+					case 4: testerInt = split[size1-4] + "." + split[size1-3] + "." + split[size1-2] + "." + split[size1-1];
+							break;
+					case 5: testerInt = split[size1-5] + "." + split[size1-4] + "." + split[size1-3] + "." + split[size1-2] + "." + split[size1-1];
+							break;
+					}
+					if(testerInt.equals(sentInt)){
+						key.add(filePosCounter-1, keyInfo + "\n");
+						break;}}}
+			
+			/**
+			 * Compares each item saved in a list to the sentinel variable of the first digit of the ID, having that the numToTest (end digit) is greater than 1
+			 */
+			if(!numToTest.equals("1")){
+					for(int add=0; add<key.size()-1; add++){
+					String lineToTest = key.get(add);
+					testerInt = null;
+					String[] tester = lineToTest.split(",", 2);
+					String identifierTemp = tester[0];
+					String[] identifierTest = identifierTemp.split("\\.");
+					int digitToTest = Integer.parseInt(identifierTest[size-1]);
+					int stopsToTest = countNumFullStops(identifierTemp);
+					switch(stopsToTest){
+					case 0: testerInt = identifier[size-1];
 							break;
 					case 1: testerInt = identifier[size-1];
 							break;
@@ -170,57 +199,19 @@ public class add {
 					case 5: testerInt = identifier[size-5] + "." + identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
 							break;
 					}
-					if(testerInt.equals(sentInt)){
-						key.add(filePosCounter+1, testerInt);
-						info.add(filePosCounter+1, desc);
-						// add rest of info
 						
-					}
-					identifier = null;
-					tester = null;
-				}
-			}
-			
-			try{
-				BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
-			for(int add=0; add<key.size(); add++){
-				writer.write(key.get(add) + ", " + info.get(add) + "\n");
-			}
-			writer.close();
-			} catch(IOException ex){}
-			
-			// DO THIS
-			// FIGURE OUT WHY IT'S NOT WRITING TO A FILE
-			if(!numToTest.equals(1)){
-					for(int add=0; add<key.size(); add++){
-					String lineToTest = key.get(add);
-					int testerInt;
-					String[] tester = lineToTest.split(",", 2);
-					String identifierTemp = tester[0];
-					String[] identifierTest = identifierTemp.split("\\.");
-					int size = identifier.length;
-					int digitToTest = Integer.parseInt(identifier[size-1]);
-					int stopsToTest = countNumFullStops(lineToTest);
-					switch(stopsToTest){
-					case 0: testerInt = Integer.parseInt(identifier[size]);
-							break;
-					case 1: testerInt = Integer.parseInt(identifier[size-1]);
-							break;
-					case 2: testerInt = Integer.parseInt(identifier[size-2] + "." + identifier[size-1]);
-							break;
-					case 3: testerInt = Integer.parseInt(identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1]);
-							break;
-					case 4: testerInt = Integer.parseInt(identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1]);
-							break;
-					case 5: testerInt = Integer.parseInt(identifier[size-5] + "." + identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1]);
-							break;
+					if(testerInt.equals(sentInt)){
+						key.add(filePosCounter, keyInfo);
+						//info.add(filePosCounter, infoLine);
 					}
 					identifier = null;
 					tester = null;
 				}}try{
 					BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
-					for(int add=0; add<key.size(); add++){
-						writer.write(key.get(add) + ", " + info.get(add) + "\n");
+					int testW = key.size();
+					for(int add=0; add<testW; add++){
+						writer.write(key.get(add) + "\r\n");
+						//writer.write(info.get(add) + "\r\n");
 					}
 					writer.close();
 					} catch(IOException ex){}}}
