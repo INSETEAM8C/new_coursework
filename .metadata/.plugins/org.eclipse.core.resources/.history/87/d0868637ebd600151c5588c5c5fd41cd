@@ -1,0 +1,7 @@
+public class remove {
+
+	public void removeField(String ID, String file1, String file2){
+		
+	}
+	
+}

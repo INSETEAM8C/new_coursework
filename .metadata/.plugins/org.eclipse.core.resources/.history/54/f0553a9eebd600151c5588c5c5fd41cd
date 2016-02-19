@@ -1,0 +1,11 @@
+import java.io.FileReader;
+import java.util.Scanner;
+
+public class remove {
+
+	public void removeField(String ID, String file1, String file2){
+		Scanner checkNumber = new Scanner(new FileReader(file1));
+		
+	}
+	
+}

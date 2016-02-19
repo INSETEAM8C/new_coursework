@@ -1,0 +1,12 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
+
+public class remove {
+
+	public void removeField(String ID, String file1, String file2) throws FileNotFoundException{
+		Scanner checkNumber = new Scanner(new FileReader(file1));
+		
+	}
+	
+}

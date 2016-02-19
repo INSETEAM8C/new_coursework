@@ -1,0 +1,26 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
+
+public class remove {
+
+	public boolean checkForRemove(String ID, String file1, String file2) throws FileNotFoundException{
+		Scanner checkNumber = new Scanner(new FileReader(file1));
+		String toTest;
+		boolean trueOrNo = true;
+		while(checkNumber.hasNext()){
+			toTest = checkNumber.next();
+	        if(toTest.contains(ID)){
+	       	trueOrNo = false;
+	       	break;
+	        }}
+	       	removeFromFile(ID, file1, file2);
+			return trueOrNo;
+	}
+	
+	public void removeFromFile(String ID, String file1, String file2){
+		// Put all entities in an array
+		// Split each string from file1
+		// See if the key value selected
+	}
+}

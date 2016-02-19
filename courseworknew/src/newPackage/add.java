@@ -176,37 +176,38 @@ public class add {
 			/**
 			 * Compares each item saved in a list to the sentinel variable of the first digit of the ID, having that the numToTest (end digit) is greater than 1
 			 */
-			if(!numToTest.equals("1")){
-					for(int add=0; add<key.size()-1; add++){
+			if(numToTest.equals("1")){
+				int test = key.size();
+				for(int add=0; add<test; add++){
+					filePosCounter += 1;
 					String lineToTest = key.get(add);
-					testerInt = null;
-					String[] tester = lineToTest.split(",", 2);
-					String identifierTemp = tester[0];
-					String[] identifierTest = identifierTemp.split("\\.");
-					int digitToTest = Integer.parseInt(identifierTest[size-1]);
-					int stopsToTest = countNumFullStops(identifierTemp);
+					String[] identifierFor1 = lineToTest.split(",");
+					String IDTest = identifierFor1[0];
+					String[] split = IDTest.split("\\.");
+					int size1 = split.length;
+					int stopsToTest = countNumFullStops(lineToTest);
 					switch(stopsToTest){
-					case 0: testerInt = identifier[size-1];
+					case 0: testerInt = split[size1-1];
 							break;
-					case 1: testerInt = identifier[size-1];
+					case 1: testerInt = split[size1-2];
 							break;
-					case 2: testerInt = identifier[size-2] + "." + identifier[size-1];
+					case 2: testerInt = split[size1-3] + "." + split[size1-2];
 							break;
-					case 3: testerInt = identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
+					case 3: testerInt = split[size1-3] + "." + split[size1-2] + "." + split[size1-1];
 							break;
-					case 4: testerInt = identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
+					case 4: testerInt = split[size1-4] + "." + split[size1-3] + "." + split[size1-2] + "." + split[size1-1];
 							break;
-					case 5: testerInt = identifier[size-5] + "." + identifier[size-4] + "." + identifier[size-3] + "." + identifier[size-2] + "." + identifier[size-1];
+					case 5: testerInt = split[size1-5] + "." + split[size1-4] + "." + split[size1-3] + "." + split[size1-2] + "." + split[size1-1];
 							break;
 					}
+					if(testerInt.equals(sentInt)){
+						key.add(filePosCounter-1, keyInfo + "\n");
+						break;}}}
 						
 					if(testerInt.equals(sentInt)){
 						key.add(filePosCounter, keyInfo);
 						//info.add(filePosCounter, infoLine);
-					}
-					identifier = null;
-					tester = null;
-				}}try{
+				}try{
 					BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
 					int testW = key.size();
 					for(int add=0; add<testW; add++){

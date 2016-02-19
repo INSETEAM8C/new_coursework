@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class remove {
+
+	public boolean checkForRemove(String ID, String file1, String file2) throws IOException{
+		Scanner checkNumber = new Scanner(new FileReader(file1));
+		String toTest;
+		boolean trueOrNo = true;
+		while(checkNumber.hasNext()){
+			toTest = checkNumber.next();     
+			String[] splitter = toTest.split(",");
+			String s = splitter[0];			
+			System.out.println(s);
+			if(!toTest.matches(ID)){     
+	       	trueOrNo = false;
+	       	break;
+	        }}
+		    removeFromFile(ID, file1, file2);
+	        	}
+			System.out.println(trueOrNo);
+			return trueOrNo;
+	}
+	
+	public void removeFromFile(String ID, String file1, String file2) throws IOException{
+		BufferedReader b1 = new BufferedReader(new FileReader(file1));
+		BufferedReader b2 = new BufferedReader(new FileReader(file2));
+		ArrayList<String> key = new ArrayList<String>();
+		ArrayList<String> info = new ArrayList<String>();
+		String keyLine;
+		String infoLine;
+		while((keyLine = b1.readLine()) != null){
+			key.add(keyLine);
+			System.out.println(keyLine);
+		}
+		while((infoLine = b2.readLine()) != null){
+			info.add(infoLine);
+			System.out.println(infoLine);
+		}
+		
+		// Put all entities in an array
+		// Split each string from file1
+		// See if the key value selected matches the ID
+		// Remove from the arrayList on both files
+		// Add to both files again
+	}
+}

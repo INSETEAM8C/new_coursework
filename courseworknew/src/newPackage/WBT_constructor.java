@@ -89,6 +89,7 @@ public class WBT_constructor{
 	private JButton btnHome;
 	private JButton btnCreate;
 	private add a = new add();
+	private remove r = new remove();
 	private Graphics g;
 	
 	/**
@@ -302,7 +303,7 @@ public class WBT_constructor{
 					//keyInput = Float.parseFloat(keyVal);
 						numWithoutPrec.add(keyVal);
 					//numWithoutPrecFloat.add(keyVal);
-						WithoutPrecInfo.add(numWithoutFullArr[1]);
+						WithoutPrecInfo.add(numWithoutFullArr[0]);
 					} else if(a.countNumFullStops(keyVal) >= 1){
 					if(a.countNumFullStops(keyVal) <= 5){
 					//keyInput = Float.parseFloat(keyVal);
@@ -446,9 +447,35 @@ public class WBT_constructor{
 	btnRemove.addMouseListener(new MouseAdapter() {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
+			String ID = txtID.getText();
+			
+			/**
+			 * Performs preliminary checks on the data, and assigns variables for manipulation if:
+			 * 		- No fields are left blank
+			 * 		- No fields contain any illegal characters
+			 */
+			if(ID.equals("")){
+				JOptionPane.showMessageDialog(frame, "You need to supply an ID to remove a line of text.");
+				return;
+			} else { ID = txtID.getText();
+			try {
+				if(r.checkForRemove(ID, file1, file2) == false){
+					JOptionPane.showMessageDialog(frame, "Sorry, but that entity does not exist. Please try again (Hint: Press Refresh for all available tasks)");
+				} else {
+					JOptionPane.showMessageDialog(frame, "Great. That's been removed.");
+				};
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (HeadlessException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
-	});
+	}});
 	btnRemove.setBounds(138, 623, 114, 23);
 	frame.getContentPane().add(btnRemove);
 	
@@ -457,19 +484,16 @@ public class WBT_constructor{
 	 */
 	txtID = new JTextField();
 	txtID.setBounds(10, 582, 86, 20);
-	txtID.setText("2.1");
 	frame.getContentPane().add(txtID);
 	txtID.setColumns(10);
 		
 	txtDesc = new JTextField();
 	txtDesc.setColumns(10);
-	txtDesc.setText("do a thing for a test");
 	txtDesc.setBounds(116, 582, 425, 20);
 	frame.getContentPane().add(txtDesc);
 		
 	dur = new JTextField();
 	dur.setColumns(10);
-	dur.setText("1");
 	dur.setBounds(969, 581, 32, 21);
 	frame.getContentPane().add(dur);
 		
@@ -521,13 +545,11 @@ public class WBT_constructor{
 	endDate = new JTextField();
 	endDate.setColumns(10);
 	endDate.setBounds(759, 581, 200, 21);
-	endDate.setText("16/04/2016");
 	frame.getContentPane().add(endDate);			
 		
 	startDate = new JTextField();
 	startDate.setColumns(10);
 	startDate.setBounds(551, 581, 200, 21);
-	startDate.setText("16/04/2016");
 	frame.getContentPane().add(startDate);}
 
 class rectCreate extends JPanel
