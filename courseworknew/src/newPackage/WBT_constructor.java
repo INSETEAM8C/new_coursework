@@ -8,19 +8,16 @@
  * 
  * */
 // Things to do:
-// - Add text formatter to ID box
-// - Add date input
-// - implement rest of buttons
-// - code buttons, basically
-// - properly JDoc 
-// - Create testing class
-// - Upload to GitHub
+// - Fix add button formatting 
+// - Fix add button, so that '.2' and null point activities can be modelled
+// - Fix refresh button, so that it displays new addition entries
+// - Fix remove button, so that dates and durations are removed (by passing new info)
 
 /**
  * A list of all imports necessary
  */
 import java.awt.EventQueue;
-
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,6 +40,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
@@ -73,6 +71,11 @@ public class WBT_constructor{
 	private JTextField startDate;
 	private JTextField endDate;
 	private JTextField dur;
+	private ArrayList<String> WithoutPrecInfo = new ArrayList<String>();
+	private ArrayList<String> withFullStopsInfo = new ArrayList<String>();
+	private ArrayList<String> numWithoutPrec = new ArrayList<String>();
+	private ArrayList<String> afterFullStops = new ArrayList<String>();
+	private ArrayList<Integer> coordinates = new ArrayList<Integer>();
 	private JTextField txtTaskId;
 	private JTextField txtDescription;
 	private JTextField txtStartDate;
@@ -134,10 +137,10 @@ public class WBT_constructor{
 	/**
 	 * Creates the JPanel responsible for showing the user the graph
 	 */		
-		rectCreate WBTpanel = new rectCreate();
-		WBTpanel.setBounds(10, 11, 1330, 304);
-		frame.getContentPane().add(WBTpanel);
-		WBTpanel.setAutoscrolls(true);
+		//rectCreate WBTpanel = new rectCreate();
+		//WBTpanel.setBounds(10, 11, 1330, 304);
+		//frame.getContentPane().add(WBTpanel);
+		//WBTpanel.setAutoscrolls(true);
 		
 		/**
 		 * Creates the text pane responsible for providing information on all processes hosted in host files. 
@@ -145,13 +148,16 @@ public class WBT_constructor{
 		TextArea WBTTaskTextArea = new TextArea("Press refresh to get all info from your files.");
 		WBTTaskTextArea.setBounds(10, 359, 1330, 162);
 		WBTTaskTextArea.setEditable(false);
+		JScrollPane scroll = new JScrollPane(WBTTaskTextArea);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		frame.getContentPane().add(scroll);
 		frame.getContentPane().add(WBTTaskTextArea);
 		
 		/**
 		 * Initiates values for combo boxes and other vital data
 		 */
-		String[] availableMetric = { "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)" };
-		JComboBox<?> dur_metric = new JComboBox<Object>(availableMetric);
+		String[] availableMetric = { "Minutes", "Hours", "Days", "Weeks", "Months" };
+		JComboBox<Object> dur_metric = new JComboBox<Object>(availableMetric);
 		dur_metric.setBounds(1001, 582, 70, 20);
 		frame.getContentPane().add(dur_metric);
 		
@@ -214,7 +220,8 @@ public class WBT_constructor{
 			JOptionPane.showMessageDialog(frame, "there's something wrong with your dates, please try again");
 		} else {
 			try {
-				if(a.placeCheck(ID, DescTemp, file1, file2) == false){
+				String infoString = startDate.getText() + ", " + endDate.getText() + ", " +  " " + dur.getText() + " " + dur_metric.getSelectedItem();
+				if(a.placeCheck(ID, DescTemp, infoString, file1, file2) == false){
 					JOptionPane.showMessageDialog(frame, "That already exists. Please use the 'edit' button if you wish to edit. ");
 				} else {
 					JOptionPane.showMessageDialog(frame, "Great. That's been added. ");
@@ -277,13 +284,6 @@ public class WBT_constructor{
 			/**
 			 * Initialises variables responsible for creation
 			 */
-			ArrayList<String> WithoutPrecInfo = new ArrayList<String>();
-			ArrayList<String> withFullStopsInfo = new ArrayList<String>();
-			ArrayList<String> numWithoutPrec = new ArrayList<String>();
-			ArrayList<String> afterFullStops = new ArrayList<String>();
-			ArrayList<String> numWithoutPrecFloat = new ArrayList<String>();
-			ArrayList<String> afterFullStopsFloat = new ArrayList<String>();
-			ArrayList<Float> coordinates = new ArrayList<Float>();
 			int oneCount = 0, twoCount = 0, threeCount = 0, fourCount = 0, fiveCount = 0, sixCount = 0, sevenCount = 0, eightCount = 0, nineCount = 0, size = 0, spaceFromEdge = 0;
 		//	float keyInput;
 			
@@ -293,6 +293,11 @@ public class WBT_constructor{
 			 */
 
 			try{
+				WithoutPrecInfo.clear();
+				withFullStopsInfo.clear();
+				numWithoutPrec.clear();
+				afterFullStops.clear();
+				coordinates.clear();
 				String currentLine;
 				BufferedReader WBTscan1 = new BufferedReader(new FileReader(origFile));
 				BufferedReader WBTscan2 = new BufferedReader(new FileReader(infoFile));
@@ -303,7 +308,7 @@ public class WBT_constructor{
 					//keyInput = Float.parseFloat(keyVal);
 						numWithoutPrec.add(keyVal);
 					//numWithoutPrecFloat.add(keyVal);
-						WithoutPrecInfo.add(numWithoutFullArr[0]);
+						WithoutPrecInfo.add(numWithoutFullArr[1]);
 					} else if(a.countNumFullStops(keyVal) >= 1){
 					if(a.countNumFullStops(keyVal) <= 5){
 					//keyInput = Float.parseFloat(keyVal);
@@ -322,68 +327,70 @@ public class WBT_constructor{
 			int tempx = 0;
 			float xToAdd = 0.0f;
 			size = numWithoutPrec.size();
-			spaceFromEdge = ((1000 - (size * 100) - (size - 1) * 25)) / 2;
+			spaceFromEdge = ((1200 - (size * 100) - (size - 1) * 25)) / 2;
 			for(int coords=0; coords<size; coords++){
 				if(coords == 0){
 					xToAdd = (coords * 100) + spaceFromEdge;
-					coordinates.add(xToAdd);
+					int rounded = Math.round(xToAdd);
+					coordinates.add(rounded);
 					} else {
 						xToAdd = (coords * 25 + ((coords * 100) + spaceFromEdge));
-						coordinates.add(xToAdd);
+						int rounded = Math.round(xToAdd);
+						coordinates.add(rounded);
 						}};
-						
-			for(int pl0=0; pl0<size; pl0++){
-				int rounded = Math.round(coordinates.get(pl0));
-				WBTpanel.paint(g, rounded, 100, "jidsj");
-			//plot(coordinates[pl0], 125, coordinates[pl0] + 100, 225)
-			//add text to rectangle
-			//show
-			}
 			
-			for(int pl1=0; pl1<afterFullStops.size(); pl1++){
-				String prePlot = afterFullStops.get(pl1);
-				String infoPlot = withFullStopsInfo.get(pl1);
-				char preTest = prePlot.charAt(0);
-				int globalOne;
-				switch (preTest) {
-					case 1: oneCount += 1;
-							globalOne = oneCount;
-					case 2: twoCount += 1;
-							globalOne = twoCount;
-					case 3: threeCount += 1;
-							globalOne = threeCount;
-					case 4: fourCount += 1;
-							globalOne = fourCount;
-					case 5: fiveCount += 1;
-							globalOne = fiveCount;
-					case 6: sixCount += 1;
-							globalOne = sixCount;
-					case 7: sevenCount += 1;
-							globalOne = sevenCount;
-					case 8: eightCount += 1;
-							globalOne = eightCount;
-					case 9: nineCount += 1;
-							globalOne = nineCount;
-				break;
-				}
-				
-				switch (a.countNumFullStops(prePlot)) {
-					case 1: tempx += 0;
-					case 2: tempx += 5;
-					case 3: tempx += 10;
-					case 4: tempx += 15;
-					case 5: tempx += 20;
-				break;
-				}
-				
-				WBTpanel.paint(g, 10, 10, "jidsj");
-				//plot(coordinates[preTest] + tempx, globalOne * 100 + 25, coordinates[preTest] + tempx + 100, globalOne * 100 + 125)
-				//add text to rectangle
-				//show
-				globalOne = 0;
-			}
-			}
-	});
+//			for(int pl1=0; pl1<afterFullStops.size(); pl1++){
+//				String prePlot = afterFullStops.get(pl1);
+//				String infoPlot = withFullStopsInfo.get(pl1);
+//				char preTest = prePlot.charAt(0);
+//				int globalOne;
+//				switch (preTest) {
+//					case 1: oneCount += 1;
+//							globalOne = oneCount;
+//					case 2: twoCount += 1;
+//							globalOne = twoCount;
+//					case 3: threeCount += 1;
+//							globalOne = threeCount;
+//					case 4: fourCount += 1;
+//							globalOne = fourCount;
+//					case 5: fiveCount += 1;
+//							globalOne = fiveCount;
+//					case 6: sixCount += 1;
+//							globalOne = sixCount;
+//					case 7: sevenCount += 1;
+//							globalOne = sevenCount;
+//					case 8: eightCount += 1;
+//							globalOne = eightCount;
+//					case 9: nineCount += 1;
+//							globalOne = nineCount;
+//				break;
+//				}
+//				
+//				switch (a.countNumFullStops(prePlot)) {
+//					case 1: tempx += 0;
+//					case 2: tempx += 5;
+//					case 3: tempx += 10;
+//					case 4: tempx += 15;
+//					case 5: tempx += 20;
+//				break;
+//				}
+//				
+//				//WBTpanel.paint(g, 10, 10, "jidsj");
+//				//plot(coordinates[preTest] + tempx, globalOne * 100 + 25, coordinates[preTest] + tempx + 100, globalOne * 100 + 125)
+//				//add text to rectangle
+//				//show
+//				globalOne = 0;
+//			}
+		//JFrame chartCreate = new JFrame();
+		rectCreate newPanel = new rectCreate();
+		newPanel.setBounds(0, 0, 1200, 1200);
+		//chartCreate.setBounds(0, 0, 1210, 1210);
+		//chartCreate.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//chartCreate.getContentPane().setLayout(null);
+		frame.getContentPane().add(newPanel);
+		frame.setVisible(true);
+		frame.repaint();
+	}});
 			
 	btnCreate.setBounds(1226, 325, 114, 23);
 	frame.getContentPane().add(btnCreate);
@@ -556,14 +563,182 @@ class rectCreate extends JPanel
 {
 	public rectCreate()
 	{
-		setSize(500, 500);
+		setSize(1000, 1000);
 		setVisible(true);
 	}
 	
-	public void paint(Graphics g, int x, int y, String info)
+	/**
+	 * Paints information from the file to a JFrame
+	 * 
+	 * @Version 1.0
+	 */
+	@SuppressWarnings({ "null", "null" })
+	public void paint(Graphics g)
 	{
-		this.paint(g);
-		g.drawRect(x,y,100,100);
-		g.setColor(Color.black);
-		g.drawString(info, x, y);
-	}}}
+		String info, prePlot, infoPlot, previous;
+		Integer coords=0, oneCount=0, twoCount=0, threeCount=0, fourCount=0, fiveCount=0, 
+		sixCount=0, sevenCount=0, eightCount=0, nineCount=0, tempx=0, globalOne=0, y=0, coordConstant,
+		count=0;
+		int size = numWithoutPrec.size();
+		System.out.println(size);
+		int size1 = afterFullStops.size();
+		for(int i=0; i<size; i++){
+			info = numWithoutPrec.get(i) + " " + WithoutPrecInfo.get(i);
+			String[] words = info.split(" ");
+			String tempTest = null;
+			StringBuilder editedS = new StringBuilder();
+			int infoSize = words.length;
+			if(infoSize >= 3){
+				for(int form=0; form<infoSize; form++){
+				if(form%3 != 0){
+				tempTest = words[form] + " ";
+				editedS.append(tempTest);
+				} else {
+				tempTest = words[form] + "\n";
+				editedS.append(tempTest);
+				}}}
+			for(int split=0; split<words.length; split++){
+				String toSplitOrNotToSplit = words[split];
+				if(toSplitOrNotToSplit.length() > 14){
+					String one = toSplitOrNotToSplit.substring(0, 14);
+					String two = toSplitOrNotToSplit.substring(14, toSplitOrNotToSplit.length());
+					editedS.delete(0, editedS.length());
+					editedS.append(words[0] + "\n");
+					editedS.append(one + "\n");
+					editedS.append(two);
+				}}
+			info = " ";
+			info = editedS.toString();
+			coords = coordinates.get(i);
+			g.setColor(Color.black);
+			g.drawRect(coords, 10, 100, 60);
+			g.setColor(Color.red);
+			g.fillRect(coords+1, 11, 99, 59);
+			g.setColor(Color.black);
+			for(String line : info.split("\n")){
+				count += 1;
+				if(count == 1){
+				g.setFont(new Font("default", Font.BOLD, 13));
+				g.drawString(line, coords+5, 30);
+				} else if(count == 2){
+				g.setFont(new Font("default", Font.PLAIN, 11));					
+				g.drawString(line, coords+5, 50);
+				} else if(count == 3){
+				g.drawString(line, coords+5, 65);
+				} else if(count == 4){
+				g.drawString(line, coords+5, 80);
+				}
+			} count = 0;
+		} for(int i2=0; i2<size1; i2++){
+			if(i2 == 0){
+			prePlot = afterFullStops.get(i2);
+			infoPlot = withFullStopsInfo.get(i2);
+			String[] testerNum = prePlot.split("\\.");
+			String tester1 = testerNum[0];
+			coordConstant = Integer.parseInt(tester1);
+			} else { 
+			prePlot = afterFullStops.get(i2);
+			infoPlot = withFullStopsInfo.get(i2);
+			previous = afterFullStops.get(i2-1);
+			String[] previousTest1 = previous.split("\\.");
+			String testerPre = previousTest1[0];
+			String[] previousTest2 = prePlot.split("\\.");
+			String testerPre2 = previousTest2[0];
+			coordConstant = Integer.parseInt(testerPre2);
+			if(!testerPre2.equals(testerPre)){
+				globalOne = 0;
+			}
+			switch (coordConstant) {
+				case 1: oneCount += 1;
+						globalOne = oneCount;
+						break;
+				case 2: twoCount += 1;
+						globalOne = twoCount;
+						break;
+				case 3: threeCount += 1;
+						globalOne = threeCount;
+						break;
+				case 4: fourCount += 1;
+						globalOne = fourCount;
+						break;
+				case 5: fiveCount += 1;
+						globalOne = fiveCount;
+						break;
+				case 6: sixCount += 1;
+						globalOne = sixCount;
+						break;
+				case 7: sevenCount += 1;
+						globalOne = sevenCount;
+						break;
+				case 8: eightCount += 1;
+						globalOne = eightCount;
+						break;
+				case 9: nineCount += 1;
+						globalOne = nineCount;
+						break;
+			}
+			switch (a.countNumFullStops(prePlot)) {
+				case 1: tempx += 0;
+						break;
+				case 2: tempx += 5;
+						break;
+				case 3: tempx += 10;
+						break;
+				case 4: tempx += 15;
+						break;
+				case 5: tempx += 20;
+						break;
+			}
+			info = afterFullStops.get(i2) + " " + withFullStopsInfo.get(i2);
+			
+			String[] words = info.split(" ");
+			String tempTest = null;
+			StringBuilder editedS = new StringBuilder();
+			int infoSize = words.length;
+			if(infoSize >= 3){
+				for(int form=0; form<infoSize; form++){
+				if(form%3 != 0){
+				tempTest = words[form] + " ";
+				editedS.append(tempTest);
+				} else {
+				tempTest = words[form] + "\n";
+				editedS.append(tempTest);
+				}}}
+			for(int split=0; split<words.length; split++){
+				String toSplitOrNotToSplit = words[split];
+				if(toSplitOrNotToSplit.length() > 14){
+					String one = toSplitOrNotToSplit.substring(0, 14);
+					String two = toSplitOrNotToSplit.substring(14, toSplitOrNotToSplit.length());
+					editedS.delete(0, editedS.length());
+					editedS.append(words[0] + "\n");
+					editedS.append(one + "\n");
+					editedS.append(two);
+				}
+			}
+			info = " ";
+			info = editedS.toString();
+			System.out.println(info);
+			//} else if(words[1].length() >= 14){
+				//String one = tempTest.substring(0, 14);
+			//}
+			y = (globalOne * 80);
+			coords = coordinates.get(coordConstant-1);
+			g.setColor(Color.black);
+			g.drawRect(coords + tempx, y, 100, 60);
+			g.setColor(Color.red);
+			g.fillRect(coords + tempx+1, y+1, 99, 59);
+			g.setColor(Color.black);
+			for(String line : info.split("\n")){
+			count += 1;
+			if(count == 1){	
+			g.setFont(new Font("default", Font.BOLD, 13));
+			g.drawString(line, coords+5, y+20);
+			} else if(count == 2){
+			g.setFont(new Font("default", Font.PLAIN, 11));
+			g.drawString(line, coords+5, y+40);
+			} else if(count == 3){
+			g.drawString(line, coords+5, y+55);
+			} else if(count == 4){
+			g.drawString(line, coords+5, y+70);
+			}
+		} count = 0;}}}}}

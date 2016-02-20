@@ -20,6 +20,13 @@ import javax.swing.JOptionPane;
 
 public class add {
 	
+	boolean trueOrNo = true;
+	String ID1;
+	String desc1;
+	String file11;
+	String file21;
+	String info1;
+	
 	// ADD TO INFO FILE
 	
 	// THINGS THAT THIS NEEDS TO DO IN V2:
@@ -49,6 +56,7 @@ public class add {
 		int mon2 = Integer.parseInt(date2Test[1]);
 		int day1 = Integer.parseInt(date1Test[0]);
 		int day2 = Integer.parseInt(date2Test[0]);
+
 		/**
 		 * Tests inputted fields
 		 */
@@ -79,23 +87,36 @@ public class add {
 	/**
 	 * Checks to see if the data supplied already exists in the file.
 	 */
-	public boolean placeCheck(String ID, String desc, String file1, String file2) throws IOException{
+	public boolean placeCheck(String ID, String desc, String infoString, String file1, String file2) throws IOException{
 		Scanner checkNumber = new Scanner(new FileReader(file1));
+		ID1 = ID;
+		desc1 = desc;
+		info1 = infoString;
+		file11 = file1;
+		file21 = file2;
+		
 		String toTest;
-		boolean trueOrNo = true;
+		String tempTester;
 		while(checkNumber.hasNext()){
-			toTest = checkNumber.next();
+			tempTester = checkNumber.next();
+			toTest = tempTester.replaceAll("[^\\d.]", "");
+			System.out.println(toTest);
+			System.out.println(ID);
 	        if(toTest.contains(ID)){
 	       	trueOrNo = false;
 	       	break;
 	        }}
-	       	addInfo(ID, desc, file1, file2);
-			return trueOrNo;
-	      }
+		checkForProgress();
+		return trueOrNo;}
+	
+	public void checkForProgress() throws IOException{
+	if(trueOrNo = true){
+		addInfo(ID1, desc1, info1, file11, file21);
+	}}
 
-	public void addInfo (String ID, String desc, String file1, String file2) throws IOException{
+	public void addInfo (String ID, String desc, String information, String file1, String file2) throws IOException{
     int filePosCounter = 0;
-    String keyInfo =  ID + ", " + "\"" + desc + "\"" ;
+    String keyInfo =  ID + ", " + desc;
 	Scanner checkNumber = new Scanner(new FileReader(file1));
 	ArrayList<String> key = new ArrayList<String>();
 	ArrayList<String> info = new ArrayList<String>();
@@ -108,6 +129,9 @@ public class add {
 		 */
 			BufferedReader b1 = new BufferedReader(new FileReader(file1));
 			BufferedReader b2 = new BufferedReader(new FileReader(file2));
+			String[] identifier = ID.split("\\.");
+			int size = identifier.length;
+			String numToTest = identifier[identifier.length-1];
 			String keyLine;
 			String infoLine;
 			String testerInt = null;
@@ -121,10 +145,6 @@ public class add {
 			/**
 			 * Gathers sentinel value to test the rest of the items's ID with
 			 */
-			filePosCounter += 1;
-			String[] identifier = ID.split("\\.");
-			int size = identifier.length;
-			String numToTest = identifier[identifier.length-1];
 			int numStop = countNumFullStops(ID);
 			int Sentsize = identifier.length;
 			switch(numStop){
@@ -170,13 +190,14 @@ public class add {
 							break;
 					}
 					if(testerInt.equals(sentInt)){
-						key.add(filePosCounter-1, keyInfo + "\n");
+						key.add(filePosCounter, keyInfo + "\n");
+						info.add(filePosCounter, info1 + "\n");
 						break;}}}
 			
 			/**
 			 * Compares each item saved in a list to the sentinel variable of the first digit of the ID, having that the numToTest (end digit) is greater than 1
 			 */
-			if(numToTest.equals("1")){
+			else if(!numToTest.equals("1")){
 				int test = key.size();
 				for(int add=0; add<test; add++){
 					filePosCounter += 1;
@@ -187,8 +208,6 @@ public class add {
 					int size1 = split.length;
 					int stopsToTest = countNumFullStops(lineToTest);
 					switch(stopsToTest){
-					case 0: testerInt = split[size1-1];
-							break;
 					case 1: testerInt = split[size1-2];
 							break;
 					case 2: testerInt = split[size1-3] + "." + split[size1-2];
@@ -206,13 +225,20 @@ public class add {
 						
 					if(testerInt.equals(sentInt)){
 						key.add(filePosCounter, keyInfo);
-						//info.add(filePosCounter, infoLine);
+						info.add(filePosCounter, info1);
 				}try{
 					BufferedWriter writer = new BufferedWriter(new FileWriter(file1));
+					BufferedWriter writer2 = new BufferedWriter(new FileWriter(file2));
 					int testW = key.size();
 					for(int add=0; add<testW; add++){
+						if(add != testW-1){
 						writer.write(key.get(add) + "\r\n");
-						//writer.write(info.get(add) + "\r\n");
+						writer2.write(info.get(add) + "\r\n");
+						} else {
+							writer.write(key.get(add));
+							writer2.write(info.get(add));
+						}
 					}
 					writer.close();
+					writer2.close();
 					} catch(IOException ex){}}}
