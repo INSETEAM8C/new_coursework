@@ -61,7 +61,7 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 
-//import org.apache.commons.lang.StringUtils;
+// 
 
 public class WBT_constructor{
 
@@ -148,7 +148,7 @@ public class WBT_constructor{
 		TextArea WBTTaskTextArea = new TextArea("Press refresh to get all info from your files.");
 		WBTTaskTextArea.setBounds(10, 359, 1330, 162);
 		WBTTaskTextArea.setEditable(false);
-		JScrollPane scroll = new JScrollPane(WBTTaskTextArea);
+		JScrollPane scroll = new JScrollPane();
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.getContentPane().add(scroll);
 		frame.getContentPane().add(WBTTaskTextArea);
@@ -227,8 +227,6 @@ public class WBT_constructor{
 					JOptionPane.showMessageDialog(frame, "Great. That's been added. ");
 				}
 			} catch (FileNotFoundException e1) {}
-			//a.add1(ID, DescTemp);
-			//a.add2(start, end, duration);
  catch (HeadlessException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -238,12 +236,6 @@ public class WBT_constructor{
 			}
 		}}});
 	
-		// - add1(StringIDTemp, DescTemp)
-		// - check the rest of the dates, and check for correctness
-		// - find the index of the file
-		// - add to the file at the correct index
-		// - to do this (^^^), count the number of times a reader has to read over file1, then do a loop for file2 to add the rest of the
-		//   information. Look at the link on how to find a specific location in the file.s
 	btnAdd.setBounds(10, 532, 114, 23);
 	frame.getContentPane().add(btnAdd);{}
 
@@ -282,12 +274,6 @@ public class WBT_constructor{
 		public void mouseClicked(MouseEvent e){
 			
 			/**
-			 * Initialises variables responsible for creation
-			 */
-			int oneCount = 0, twoCount = 0, threeCount = 0, fourCount = 0, fiveCount = 0, sixCount = 0, sevenCount = 0, eightCount = 0, nineCount = 0, size = 0, spaceFromEdge = 0;
-		//	float keyInput;
-			
-			/**
 			 * Setup for counting the number of full stops in each occurance of the variable, and updating the array with all numbers that don't have any successing full stops. 
 			 * Test for validation
 			 */
@@ -305,15 +291,11 @@ public class WBT_constructor{
 					String[] numWithoutFullArr = currentLine.split(",", 2);
 					String keyVal = numWithoutFullArr[0];
 					if(a.countNumFullStops(keyVal) == 0){
-					//keyInput = Float.parseFloat(keyVal);
 						numWithoutPrec.add(keyVal);
-					//numWithoutPrecFloat.add(keyVal);
 						WithoutPrecInfo.add(numWithoutFullArr[1]);
 					} else if(a.countNumFullStops(keyVal) >= 1){
 					if(a.countNumFullStops(keyVal) <= 5){
-					//keyInput = Float.parseFloat(keyVal);
 					afterFullStops.add(keyVal);
-					//afterFullStopsFloat.add(keyVal);
 					withFullStopsInfo.add(numWithoutFullArr[1]);
 					}
 				} else {
@@ -326,8 +308,8 @@ public class WBT_constructor{
 			
 			int tempx = 0;
 			float xToAdd = 0.0f;
-			size = numWithoutPrec.size();
-			spaceFromEdge = ((1200 - (size * 100) - (size - 1) * 25)) / 2;
+			int size = numWithoutPrec.size();
+			int spaceFromEdge = ((1200 - (size * 100) - (size - 1) * 25)) / 2;
 			for(int coords=0; coords<size; coords++){
 				if(coords == 0){
 					xToAdd = (coords * 100) + spaceFromEdge;
@@ -338,55 +320,16 @@ public class WBT_constructor{
 						int rounded = Math.round(xToAdd);
 						coordinates.add(rounded);
 						}};
-			
-//			for(int pl1=0; pl1<afterFullStops.size(); pl1++){
-//				String prePlot = afterFullStops.get(pl1);
-//				String infoPlot = withFullStopsInfo.get(pl1);
-//				char preTest = prePlot.charAt(0);
-//				int globalOne;
-//				switch (preTest) {
-//					case 1: oneCount += 1;
-//							globalOne = oneCount;
-//					case 2: twoCount += 1;
-//							globalOne = twoCount;
-//					case 3: threeCount += 1;
-//							globalOne = threeCount;
-//					case 4: fourCount += 1;
-//							globalOne = fourCount;
-//					case 5: fiveCount += 1;
-//							globalOne = fiveCount;
-//					case 6: sixCount += 1;
-//							globalOne = sixCount;
-//					case 7: sevenCount += 1;
-//							globalOne = sevenCount;
-//					case 8: eightCount += 1;
-//							globalOne = eightCount;
-//					case 9: nineCount += 1;
-//							globalOne = nineCount;
-//				break;
-//				}
-//				
-//				switch (a.countNumFullStops(prePlot)) {
-//					case 1: tempx += 0;
-//					case 2: tempx += 5;
-//					case 3: tempx += 10;
-//					case 4: tempx += 15;
-//					case 5: tempx += 20;
-//				break;
-//				}
-//				
-//				//WBTpanel.paint(g, 10, 10, "jidsj");
-//				//plot(coordinates[preTest] + tempx, globalOne * 100 + 25, coordinates[preTest] + tempx + 100, globalOne * 100 + 125)
-//				//add text to rectangle
-//				//show
-//				globalOne = 0;
-//			}
-		//JFrame chartCreate = new JFrame();
+
 		rectCreate newPanel = new rectCreate();
-		newPanel.setBounds(0, 0, 1200, 1200);
-		//chartCreate.setBounds(0, 0, 1210, 1210);
-		//chartCreate.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//chartCreate.getContentPane().setLayout(null);
+		newPanel.setBounds(0, 0, 1200, 500);
+		//JScrollPane scrollFrame = new JScrollPane(newPanel);
+		//scrollFrame.setVerticalScrollBarPolicy(scrollFrame.VERTICAL_SCROLLBAR_ALWAYS);
+		//scrollFrame.setBounds(0, 0, 1200, 500);
+		//JPanel content = new JPanel(null);
+		//content.setPreferredSize(new Dimension(1200, 500));
+		//content.add(scrollFrame);
+		//frame.pack();
 		frame.getContentPane().add(newPanel);
 		frame.setVisible(true);
 		frame.repaint();
@@ -563,8 +506,6 @@ class rectCreate extends JPanel
 {
 	public rectCreate()
 	{
-		setSize(1000, 1000);
-		setVisible(true);
 	}
 	
 	/**
