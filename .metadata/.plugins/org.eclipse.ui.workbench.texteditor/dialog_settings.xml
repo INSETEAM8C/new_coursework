@@ -2,20 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="" key="selection"/>
+		<item value="GanttDemo1" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="&quot;\n&quot;"/>
-			<item value="WBTTask"/>
-			<item value="task"/>
+			<item value="GanttDemo1"/>
+			<item value="JScrollPane scroll = new JScrollPane(WBTTaskTextArea);"/>
+			<item value="•JScrollPane scroll = new JScrollPane(WBTTaskTextArea);"/>
+			<item value="14"/>
+			<item value="g.drawString"/>
+			<item value="drawString"/>
 			<item value="system"/>
-			<item value="combobox"/>
-			<item value="create"/>
-			<item value="create WBT"/>
-			<item value="\\"/>
+			<item value="testerPre"/>
 		</list>
 		<list key="replacehistory">
 			<item value="file2"/>

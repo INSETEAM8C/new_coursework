@@ -81,6 +81,7 @@ public class WBT_constructor{
 	private JTextField txtStartDate;
 	private JTextField txtEndDate;
 	private JTextField txtDuration;
+	private JTextField preField;
 	private JButton btnAdd;
 	private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt");
 	private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt");
@@ -94,6 +95,8 @@ public class WBT_constructor{
 	private add a = new add();
 	private remove r = new remove();
 	private Graphics g;
+	private JTextField PreField;
+	private JTextField txtPredecessor;
 	
 	/**
 	 * Set up the application
@@ -156,7 +159,7 @@ public class WBT_constructor{
 		/**
 		 * Initiates values for combo boxes and other vital data
 		 */
-		String[] availableMetric = { "Minutes", "Hours", "Days", "Weeks", "Months" };
+		String[] availableMetric = {"Hours", "Days", "Weeks", "Months" };
 		JComboBox<Object> dur_metric = new JComboBox<Object>(availableMetric);
 		dur_metric.setBounds(1001, 582, 70, 20);
 		frame.getContentPane().add(dur_metric);
@@ -215,12 +218,15 @@ public class WBT_constructor{
 		if(duration.equals("")){
 				JOptionPane.showMessageDialog(frame, "Your duration field is empty. Please try again");
 				return;
-		} 
+		} if(PreField.getText().equals(ID)){
+			JOptionPane.showMessageDialog(frame, "Your process cannot be dependent on itself");
+			return;
+		}
 		if(a.checkForCorrectness(start, end, duration) == false){
 			JOptionPane.showMessageDialog(frame, "there's something wrong with your dates, please try again");
 		} else {
 			try {
-				String infoString = startDate.getText() + ", " + endDate.getText() + ", " +  " " + dur.getText() + " " + dur_metric.getSelectedItem();
+				String infoString = startDate.getText() + ", " + endDate.getText() + ", " + dur.getText() + " " + dur_metric.getSelectedItem() + ", " + PreField.getText();
 				if(a.placeCheck(ID, DescTemp, infoString, file1, file2) == false){
 					JOptionPane.showMessageDialog(frame, "That already exists. Please use the 'edit' button if you wish to edit. ");
 				} else {
@@ -236,7 +242,7 @@ public class WBT_constructor{
 			}
 		}}});
 	
-	btnAdd.setBounds(10, 532, 114, 23);
+	btnAdd.setBounds(10, 627, 114, 23);
 	frame.getContentPane().add(btnAdd);{}
 
 	/**
@@ -323,13 +329,6 @@ public class WBT_constructor{
 
 		rectCreate newPanel = new rectCreate();
 		newPanel.setBounds(0, 0, 1200, 500);
-		//JScrollPane scrollFrame = new JScrollPane(newPanel);
-		//scrollFrame.setVerticalScrollBarPolicy(scrollFrame.VERTICAL_SCROLLBAR_ALWAYS);
-		//scrollFrame.setBounds(0, 0, 1200, 500);
-		//JPanel content = new JPanel(null);
-		//content.setPreferredSize(new Dimension(1200, 500));
-		//content.add(scrollFrame);
-		//frame.pack();
 		frame.getContentPane().add(newPanel);
 		frame.setVisible(true);
 		frame.repaint();
@@ -353,7 +352,7 @@ public class WBT_constructor{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		WBTTaskTextArea.setText(null);
-		WBTTaskTextArea.setText("ID:      Task Desc:                                                                 Start date:                                    End date:                                    Duration:            ");
+		WBTTaskTextArea.setText("ID:      Task Desc:                                                                 Start date:                                    End date:                                    Duration:            Predecessors:");
 		try{
 			ArrayList<String> key = new ArrayList<String>();
 			ArrayList<String> info = new ArrayList<String>();
@@ -379,16 +378,6 @@ public class WBT_constructor{
 	}});
 	btnRefresh_1.setBounds(1226, 532, 114, 23);
 	frame.getContentPane().add(btnRefresh_1);
-	
-	JButton btnEdit = new JButton("Edit task");
-	btnEdit.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
-		}
-	});
-	btnEdit.setBounds(10, 623, 114, 23);
-	frame.getContentPane().add(btnEdit);
 		
 	/**
 	 * Finds the location of a certain line in a file, and removes all information about it.
@@ -426,7 +415,7 @@ public class WBT_constructor{
 			}
 		}
 	}});
-	btnRemove.setBounds(138, 623, 114, 23);
+	btnRemove.setBounds(141, 627, 114, 23);
 	frame.getContentPane().add(btnRemove);
 	
 	/** 
@@ -500,7 +489,21 @@ public class WBT_constructor{
 	startDate = new JTextField();
 	startDate.setColumns(10);
 	startDate.setBounds(551, 581, 200, 21);
-	frame.getContentPane().add(startDate);}
+	frame.getContentPane().add(startDate);
+	
+	PreField = new JTextField();
+	PreField.setColumns(10);
+	PreField.setBounds(1097, 582, 70, 21);
+	frame.getContentPane().add(PreField);
+	
+	txtPredecessor = new JTextField();
+	txtPredecessor.setText("Predecessor");
+	txtPredecessor.setEditable(false);
+	txtPredecessor.setColumns(10);
+	txtPredecessor.setBorder(null);
+	txtPredecessor.setBackground(new Color(0, 0, 0, 0));
+	txtPredecessor.setBounds(1098, 558, 86, 36);
+	frame.getContentPane().add(txtPredecessor);}
 
 class rectCreate extends JPanel
 {
@@ -510,7 +513,6 @@ class rectCreate extends JPanel
 	
 	/**
 	 * Paints information from the file to a JFrame
-	 * 
 	 * @Version 1.0
 	 */
 	@SuppressWarnings({ "null", "null" })
@@ -682,4 +684,5 @@ class rectCreate extends JPanel
 			} else if(count == 4){
 			g.drawString(line, coords+5, y+70);
 			}
-		} count = 0;}}}}}
+		} count = 0;}}}}	
+}

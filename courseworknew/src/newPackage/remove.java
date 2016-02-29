@@ -43,14 +43,8 @@ public class remove {
 			String tester = t.replaceAll("[^\\d.]", "");
 			if(tester.matches(ID)){
 				key.remove(t);
-				info.remove(t);
+				info.remove(i);
 			}
-		}
-		
-		for(int i=0; i<key.size(); i++){
-			String one = key.get(i);
-			String two = info.get(i);
-			System.out.println(one + " " + two);
 		}
 	
 			try{
@@ -58,9 +52,7 @@ public class remove {
 			BufferedWriter writer2 = new BufferedWriter(new FileWriter(file2));
 			for(int add=0; add<key.size(); add++){
 				writer.write(key.get(add) + "\r\n");
-			}
-			for(int add2=0; add2<info.size(); add2++){
-				writer2.write(info.get(add2) + "\r\n");
+				writer2.write(info.get(add) + "\r\n");
 			}
 			
 			writer.close();
