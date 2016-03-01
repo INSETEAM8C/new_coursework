@@ -62,7 +62,11 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 
-// 
+// Create PERT functionality
+// Update refresh cosmetics
+// Work GANTT bug (with predecessors & dates) out
+// Sort out WBT task alignment
+// Put in feature to be able to add single-digit tasks
 
 public class GANTT_constructor{
 
@@ -78,8 +82,8 @@ public class GANTT_constructor{
 	private JTextField txtEndDate;
 	private JTextField txtDuration;
 	private JButton btnAdd;
-	private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt");
-	private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt");
+	private File origFile = fileLoader.getFirstFilePath();
+	private File infoFile = fileLoader.getSecondFilePath();
 	private String file1 = origFile.toString();
 	private String file2 = infoFile.toString();
 	private formatMethod FM = new formatMethod();
@@ -127,7 +131,7 @@ public class GANTT_constructor{
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.getContentPane().setBackground(new Color(153, 180, 209));
 		frame.setBounds(0, 0, size.width, size.height-40);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		/**
@@ -249,6 +253,7 @@ public class GANTT_constructor{
 	btnHome = new JButton("Home");
 	btnHome.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
+			frame.dispose();
 		}
 	});
 	btnHome.setBounds(10, 325, 70, 23);

@@ -1,6 +1,6 @@
 /** This class is responsible for creating the WBT 
  * @ Author: 
- * @ Version: 1.0 - button functionality.
+ * @ Version: 1.5 - Finalised buttons added, sans save.
  * 
  * Changes to be made for version 1.1:
  * - Calendar to be added
@@ -61,7 +61,6 @@ import java.util.Scanner;
 
 import javax.swing.JButton;
 
-// 
 
 public class WBT_constructor{
 
@@ -83,8 +82,8 @@ public class WBT_constructor{
 	private JTextField txtDuration;
 	private JTextField preField;
 	private JButton btnAdd;
-	private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt");
-	private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt");
+	private File origFile = fileLoader.getFirstFilePath();
+	private File infoFile = fileLoader.getSecondFilePath();
 	private String file1 = origFile.toString();
 	private String file2 = infoFile.toString();
 	private formatMethod FM = new formatMethod();
@@ -134,7 +133,7 @@ public class WBT_constructor{
 		//frame.setContentPane(pane);
 		frame.getContentPane().setBackground(new Color(153, 180, 209));
 		frame.setBounds(0, 0, size.width, size.height-40);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 	/**
@@ -174,14 +173,12 @@ public class WBT_constructor{
 	 */
 	btnAdd = new JButton("Add task");
 	btnAdd.addActionListener(new ActionListener() {
-		// checkForCorrectness();
 		public void actionPerformed(ActionEvent e) {
 			String ID = txtID.getText();
 			String DescTemp = txtDesc.getText();
 			String start = startDate.getText();
 			String end = endDate.getText();
 			String duration = dur.getText() + " " + dur_metric.getSelectedItem().toString();
-			// compare the split against the other result to check if the date is correct
 			
 			/**
 			 * Performs preliminary checks on the data, and assigns variables for manipulation if:
@@ -264,6 +261,7 @@ public class WBT_constructor{
 	btnHome = new JButton("Home");
 	btnHome.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
+			frame.dispose();
 		}
 	});
 	btnHome.setBounds(10, 325, 70, 23);
@@ -326,12 +324,26 @@ public class WBT_constructor{
 						int rounded = Math.round(xToAdd);
 						coordinates.add(rounded);
 						}};
-
-		rectCreate newPanel = new rectCreate();
-		newPanel.setBounds(0, 0, 1200, 500);
-		frame.getContentPane().add(newPanel);
-		frame.setVisible(true);
-		frame.repaint();
+						
+			JFrame wbtChart = new JFrame();
+			wbtChart.setSize(2000, 600);
+			wbtChart.setBackground(new Color(153, 180, 209));
+										
+			rectCreate newPanel = new rectCreate();
+			newPanel.setBounds(10, 10, 1200, 500);
+			newPanel.setBackground(new Color(153, 180, 209));
+			JScrollPane scrollFrame = new JScrollPane(newPanel);
+			scrollFrame.setVerticalScrollBarPolicy(scrollFrame.VERTICAL_SCROLLBAR_ALWAYS);
+			scrollFrame.setBounds(0, 0, 1200, 650);
+			scrollFrame.setBackground(new Color(153, 180, 209));
+			JPanel content = new JPanel(null);
+			content.setPreferredSize(new Dimension(1200, 500));
+			content.add(scrollFrame);
+			content.setBackground(new Color(153, 180, 209));
+			wbtChart.setContentPane(content);
+			wbtChart.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			wbtChart.setVisible(true);
+			wbtChart.repaint();
 	}});
 			
 	btnCreate.setBounds(1226, 325, 114, 23);

@@ -11,6 +11,7 @@ import java.awt.Color;
 import javax.swing.border.BevelBorder;
 import javax.swing.JTextField;
 import java.awt.TextField;
+import java.awt.event.WindowEvent;
 import java.awt.Button;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -36,14 +37,13 @@ public class donate {
 	}
 
 	/**
-	 * Create the application.
+	 * Intialise the application
 	 */
 	public donate() {
 		initialize();
 	}
-
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialise the contents of the frame.
 	 */
 	private void initialize() {
 		frame = new JFrame();
@@ -126,6 +126,6 @@ public class donate {
 		comboBox.setBounds(170, 86, 42, 20);
 		panel_1.add(comboBox);
 		frame.setBounds(100, 100, 475, 392);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 }

@@ -1,26 +1,29 @@
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
 import java.awt.TextField;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
-import javax.swing.SwingConstants;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-
-//import java.awt.event.ActionListener;
-//import java.awt.event.KeyAdapter;
-//import java.awt.event.ActionEvent;
 import java.awt.event.*;
-import javax.swing.JLabel;
+import java.io.File;
+
+import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.filechooser.*;
+
 import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.TextArea;
 
+@SuppressWarnings("unused")
 public class fileLoader {
-
-	private JFrame frame;
+//	static private final String newline = "\n";
+	static File file;
+	private String file2Str;
+	private String file2Str1;
+	static File file2;
+	private JFrame frmLoadExistingFile;
 
 	/**
 	 * Launch the application.
@@ -30,7 +33,7 @@ public class fileLoader {
 			public void run() {
 				try {
 					fileLoader window = new fileLoader();
-					window.frame.setVisible(true);
+					window.frmLoadExistingFile.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,27 +52,51 @@ public class fileLoader {
 	 * Initialise the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final JFileChooser fc = new JFileChooser("C://Users");
+		frmLoadExistingFile = new JFrame();
+		frmLoadExistingFile.setTitle("Load");
+		frmLoadExistingFile.setBounds(100, 100, 450, 186);
 		
 		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBackground(SystemColor.activeCaption);
+		frmLoadExistingFile.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
-		
-		final JFileChooser fc = new JFileChooser("C:\\Users\\Callum\\Documents\\8C_ChartsProgramFolder");
 		
 		JButton btnYes = new JButton("Yes");
 		btnYes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				if (e.getSource() == btnYes) {
+					
+					JOptionPane.showMessageDialog(frmLoadExistingFile, "Please choose your first file");
+					
 			        int returnVal = fc.showOpenDialog(btnYes);
 				
-				}
-			}
-		});
-		btnYes.setBounds(71, 95, 97, 25);
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+		                file = fc.getSelectedFile();
+		                
+		                JOptionPane.showMessageDialog(frmLoadExistingFile, "Please choose your second file");
+		                
+		                int returnVal2 = fc.showOpenDialog(btnYes);
+		                
+		                if (returnVal2 == JFileChooser.APPROVE_OPTION) {
+			                file2 = fc.getSelectedFile();
+		                
+			                if (mainMenu.getChartType() == "WBT") {
+			                	WBT_constructor.main(null);
+			                	frmLoadExistingFile.hide();
+			                } else if (mainMenu.getChartType() == "PERT") {
+			                	frmLoadExistingFile.hide();
+			                } else if (mainMenu.getChartType() == "GANTT") {
+			                	GANTT_constructor.main(null);
+			                	frmLoadExistingFile.hide();
+			                }
+		                }
+		                }
+			        }
+				}});
+		
+		btnYes.setBounds(73, 93, 97, 25);
 		panel.add(btnYes);
 		
 		JLabel lblLoadFile = new JLabel("Do you want to load an existing file?");
@@ -77,6 +104,7 @@ public class fileLoader {
 		lblLoadFile.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblLoadFile.setBounds(32, 13, 354, 69);
 		panel.add(lblLoadFile);
+		frmLoadExistingFile.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JButton btnNo = new JButton("No");
 		btnNo.addActionListener(new ActionListener() {
@@ -84,26 +112,33 @@ public class fileLoader {
 				
 				if (e.getSource() == btnNo) {
 			        int returnVal = fc.showSaveDialog(btnYes);
-				
+			        if (returnVal == JFileChooser.APPROVE_OPTION) {
+			        	try {
+			        	    File aFile = new File("C:\\Users\\8CChartsFiles\\createdFile.txt");
+			        	    File bFile = new File("C:\\Users\\8CChartsFiles\\secondaryCreatedFile.txt");
+			        		System.out.println(aFile.createNewFile());
+			        		System.out.println(bFile.createNewFile());
+			        	    } catch (IOException e1) {
+			        	      e1.printStackTrace();
+			        }
 				}
 				
 			}
-		});
-		btnNo.setBounds(245, 95, 97, 25);
+		}});
+		btnNo.setBounds(247, 93, 97, 25);
 		panel.add(btnNo);
+			
 		
-		JButton btnHome = new JButton("Home");
-		btnHome.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				frame.dispose();
-//		        new mainMenu.setVisible(true);
-				
-			}
-		});
-		btnHome.setBounds(12, 215, 97, 25);
-		panel.add(btnHome);
-		
-		
+	
 	}
-}
+		public static File getFirstFilePath(){
+			File filePath = file;
+			return filePath;
+		}
+		
+		public static File getSecondFilePath(){
+			File filePath2 = file2;
+			return filePath2;
+		}
+
+}		
