@@ -132,7 +132,7 @@ public class WBT_constructor{
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		//frame.setContentPane(pane);
 		frame.getContentPane().setBackground(new Color(153, 180, 209));
-		frame.setBounds(0, 0, size.width, size.height-40);
+		frame.setBounds(0, 0, 1366, 383);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -148,9 +148,10 @@ public class WBT_constructor{
 		 * Creates the text pane responsible for providing information on all processes hosted in host files. 
 		 */		
 		TextArea WBTTaskTextArea = new TextArea("Press refresh to get all info from your files.");
-		WBTTaskTextArea.setBounds(10, 359, 1330, 162);
+		WBTTaskTextArea.setBounds(10, 43, 1330, 162);
 		WBTTaskTextArea.setEditable(false);
 		JScrollPane scroll = new JScrollPane();
+		scroll.setLocation(0, -316);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.getContentPane().add(scroll);
 		frame.getContentPane().add(WBTTaskTextArea);
@@ -160,7 +161,7 @@ public class WBT_constructor{
 		 */
 		String[] availableMetric = {"Hours", "Days", "Weeks", "Months" };
 		JComboBox<Object> dur_metric = new JComboBox<Object>(availableMetric);
-		dur_metric.setBounds(1001, 582, 70, 20);
+		dur_metric.setBounds(1001, 266, 70, 20);
 		frame.getContentPane().add(dur_metric);
 		
 	/**
@@ -239,20 +240,8 @@ public class WBT_constructor{
 			}
 		}}});
 	
-	btnAdd.setBounds(10, 627, 114, 23);
+	btnAdd.setBounds(10, 311, 114, 23);
 	frame.getContentPane().add(btnAdd);{}
-
-	/**
-	 * Responsible for saving an image of the created chart from the Jframe once it has been initialised
-	 *@returns returns an image, saved to the user's hard disk.
-	 */
-	JButton btnSave = new JButton("Save image");
-	btnSave.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
-		}
-	});
 	
 	/**
 	 * Shortcut to take the user home
@@ -264,7 +253,7 @@ public class WBT_constructor{
 			frame.dispose();
 		}
 	});
-	btnHome.setBounds(10, 325, 70, 23);
+	btnHome.setBounds(10, 9, 70, 23);
 	frame.getContentPane().add(btnHome);
 	
 	/**
@@ -346,11 +335,8 @@ public class WBT_constructor{
 			wbtChart.repaint();
 	}});
 			
-	btnCreate.setBounds(1226, 325, 114, 23);
+	btnCreate.setBounds(1226, 9, 114, 23);
 	frame.getContentPane().add(btnCreate);
-	
-	btnSave.setBounds(90, 325, 114, 23);
-	frame.getContentPane().add(btnSave);
 
 	/**
 	 * Button which, when pressed, gains information stored in both the key and the info files, puts them together and displays them in a well-formatted manner
@@ -388,7 +374,7 @@ public class WBT_constructor{
 				WBTTaskTextArea.append(i);
 		}}catch (Exception RefreshProblem){}
 	}});
-	btnRefresh_1.setBounds(1226, 532, 114, 23);
+	btnRefresh_1.setBounds(1226, 216, 114, 23);
 	frame.getContentPane().add(btnRefresh_1);
 		
 	/**
@@ -427,25 +413,25 @@ public class WBT_constructor{
 			}
 		}
 	}});
-	btnRemove.setBounds(141, 627, 114, 23);
+	btnRemove.setBounds(141, 311, 114, 23);
 	frame.getContentPane().add(btnRemove);
 	
 	/** 
 	 * Initiates text fields and descriptions for the purposes of aesthetics.
 	 */
 	txtID = new JTextField();
-	txtID.setBounds(10, 582, 86, 20);
+	txtID.setBounds(10, 266, 86, 20);
 	frame.getContentPane().add(txtID);
 	txtID.setColumns(10);
 		
 	txtDesc = new JTextField();
 	txtDesc.setColumns(10);
-	txtDesc.setBounds(116, 582, 425, 20);
+	txtDesc.setBounds(116, 266, 425, 20);
 	frame.getContentPane().add(txtDesc);
 		
 	dur = new JTextField();
 	dur.setColumns(10);
-	dur.setBounds(969, 581, 32, 21);
+	dur.setBounds(969, 265, 32, 21);
 	frame.getContentPane().add(dur);
 		
 	txtTaskId = new JTextField();
@@ -453,7 +439,7 @@ public class WBT_constructor{
 	txtTaskId.setEditable(false);
 	txtTaskId.setBorder(null);
 	txtTaskId.setBackground(new Color(0,0,0,0));
-	txtTaskId.setBounds(10, 566, 86, 20);
+	txtTaskId.setBounds(10, 250, 86, 20);
 	frame.getContentPane().add(txtTaskId);
 	txtTaskId.setColumns(10);
 		
@@ -463,7 +449,7 @@ public class WBT_constructor{
 	txtDescription.setBorder(null);
 	txtDescription.setBackground(new Color(0,0,0,0));
 	txtDescription.setColumns(10);
-	txtDescription.setBounds(116, 566, 94, 20);
+	txtDescription.setBounds(116, 250, 94, 20);
 	frame.getContentPane().add(txtDescription);
 		
 	txtStartDate = new JTextField();
@@ -472,7 +458,7 @@ public class WBT_constructor{
 	txtStartDate.setBorder(null);
 	txtStartDate.setBackground(new Color(0,0,0,0));
 	txtStartDate.setColumns(10);
-	txtStartDate.setBounds(551, 558, 86, 36);
+	txtStartDate.setBounds(551, 242, 86, 36);
 	frame.getContentPane().add(txtStartDate);
 		
 	txtEndDate = new JTextField();
@@ -481,7 +467,7 @@ public class WBT_constructor{
 	txtEndDate.setBorder(null);
 	txtEndDate.setBackground(new Color(0,0,0,0));
 	txtEndDate.setColumns(10);
-	txtEndDate.setBounds(759, 558, 86, 36);
+	txtEndDate.setBounds(759, 242, 86, 36);
 	frame.getContentPane().add(txtEndDate);
 		
 	txtDuration = new JTextField();
@@ -490,22 +476,22 @@ public class WBT_constructor{
 	txtDuration.setBorder(null);
 	txtDuration.setBackground(new Color(0,0,0,0));
 	txtDuration.setColumns(10);
-	txtDuration.setBounds(969, 558, 86, 36);
+	txtDuration.setBounds(969, 242, 86, 36);
 	frame.getContentPane().add(txtDuration);
 		
 	endDate = new JTextField();
 	endDate.setColumns(10);
-	endDate.setBounds(759, 581, 200, 21);
+	endDate.setBounds(759, 265, 200, 21);
 	frame.getContentPane().add(endDate);			
 		
 	startDate = new JTextField();
 	startDate.setColumns(10);
-	startDate.setBounds(551, 581, 200, 21);
+	startDate.setBounds(551, 265, 200, 21);
 	frame.getContentPane().add(startDate);
 	
 	PreField = new JTextField();
 	PreField.setColumns(10);
-	PreField.setBounds(1097, 582, 70, 21);
+	PreField.setBounds(1097, 266, 70, 21);
 	frame.getContentPane().add(PreField);
 	
 	txtPredecessor = new JTextField();
@@ -514,7 +500,7 @@ public class WBT_constructor{
 	txtPredecessor.setColumns(10);
 	txtPredecessor.setBorder(null);
 	txtPredecessor.setBackground(new Color(0, 0, 0, 0));
-	txtPredecessor.setBounds(1098, 558, 86, 36);
+	txtPredecessor.setBounds(1098, 242, 86, 36);
 	frame.getContentPane().add(txtPredecessor);}
 
 class rectCreate extends JPanel
@@ -535,7 +521,6 @@ class rectCreate extends JPanel
 		sixCount=0, sevenCount=0, eightCount=0, nineCount=0, tempx=0, globalOne=0, y=0, coordConstant,
 		count=0;
 		int size = numWithoutPrec.size();
-		System.out.println(size);
 		int size1 = afterFullStops.size();
 		for(int i=0; i<size; i++){
 			info = numWithoutPrec.get(i) + " " + WithoutPrecInfo.get(i);
@@ -585,16 +570,14 @@ class rectCreate extends JPanel
 				}
 			} count = 0;
 		} for(int i2=0; i2<size1; i2++){
-			if(i2 == 0){
 			prePlot = afterFullStops.get(i2);
 			infoPlot = withFullStopsInfo.get(i2);
 			String[] testerNum = prePlot.split("\\.");
 			String tester1 = testerNum[0];
 			coordConstant = Integer.parseInt(tester1);
-			} else { 
-			prePlot = afterFullStops.get(i2);
-			infoPlot = withFullStopsInfo.get(i2);
-			previous = afterFullStops.get(i2-1);
+			if(i2 ==0){
+			previous = "0.0";} else { 
+			previous = afterFullStops.get(i2-1); }
 			String[] previousTest1 = previous.split("\\.");
 			String testerPre = previousTest1[0];
 			String[] previousTest2 = prePlot.split("\\.");
@@ -672,10 +655,6 @@ class rectCreate extends JPanel
 			}
 			info = " ";
 			info = editedS.toString();
-			System.out.println(info);
-			//} else if(words[1].length() >= 14){
-				//String one = tempTest.substring(0, 14);
-			//}
 			y = (globalOne * 80);
 			coords = coordinates.get(coordConstant-1);
 			g.setColor(Color.black);
@@ -696,5 +675,4 @@ class rectCreate extends JPanel
 			} else if(count == 4){
 			g.drawString(line, coords+5, y+70);
 			}
-		} count = 0;}}}}	
-}
+		} count = 0;}}}}

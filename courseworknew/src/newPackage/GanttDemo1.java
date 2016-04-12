@@ -38,6 +38,7 @@ public class GanttDemo1 extends JFrame {
 			/**
 			 * Initiation of variables responsible for the creation of the GANTT chart.
 			 * **/
+			GANTT_constructor g = new GANTT_constructor();
 			private ArrayList<String> info = new ArrayList<String>();
 			private ArrayList<Integer> dayS = new ArrayList<Integer>();
 			private ArrayList<Integer> monS = new ArrayList<Integer>();
@@ -55,8 +56,8 @@ public class GanttDemo1 extends JFrame {
 			// Sentinel value of 'count' is set to 2 to make future arithmetic easier
 			private int count = 2, count1 = 0, dateConversion;
 			private String dates, information1, dateTest1, dateTest12, dateToTest1, dateTest2, dateTest22, dateToTest2, day1, day2, year1, year2, currentLine;
-			private File origFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\origDocTest.txt");
-			private File infoFile = new File("C:\\Users\\Jake\\Documents\\GitHub\\new_coursework\\Test files\\secondaryInfo.txt");
+			private File origFile = g.returnOrig();
+			private File infoFile = g.returnInfo();
 			final TaskSeriesCollection collection = new TaskSeriesCollection();
 			//Initiates the file readers responsible for data collection
 //			
@@ -113,9 +114,6 @@ public class GanttDemo1 extends JFrame {
 					String dateTest1 = dateSplitter[0];
 					String dateTest2 = dateSplitter[1];
 					String[] durationTest = dateSplitter[2].split(" ");
-					for(String s:durationTest){
-						System.out.println(s);
-					}
 					int durationAmount = Integer.parseInt(durationTest[0]);
 					String durationType = durationTest[1];
 					dateInfo(durationAmount, durationType);
@@ -226,9 +224,8 @@ public class GanttDemo1 extends JFrame {
 		
 			public IntervalCategoryDataset createDataset() {
 				final TaskSeries s1 = new TaskSeries("");
-			
-				for(int loop=0; loop<info.size(); loop++){
 				
+				for(int loop=0; loop<info.size(); loop++){
 					s1.add(new Task(info.get(loop),
 				               	new SimpleTimePeriod(date(dayS.get(loop), dateConversion, yearS.get(loop), startValueS.get(loop)),
 				                                    date(dayE.get(loop), dateConversion, yearE.get(loop), thirdValueS.get(loop)))));
@@ -256,14 +253,13 @@ public class GanttDemo1 extends JFrame {
 		     */
 		    private JFreeChart createChart(final IntervalCategoryDataset dataset) {
 		        final JFreeChart chart = ChartFactory.createGanttChart(
-		            "GANTT charts",  // chart title
-		            "Task",              // domain axis label
-		            "Date",              // range axis label
-		            dataset,             // data
-		            true,                // include legend
-		            true,                // tooltips
-		            false                // urls
+		            "GANTT chart demo for trivial project",  
+		            "Task",              
+		            "Timeframe",              
+		            dataset,             
+		            true,                
+		            true,                
+		            false                
 		        );    
-//	        chart.getCategoryPlot().getDomainAxis().setMaxCategoryLabelWidthRatio(10.0f);
 		        return chart;
 		    }}

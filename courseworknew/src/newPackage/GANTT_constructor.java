@@ -130,7 +130,7 @@ public class GANTT_constructor{
 		frame = new JFrame("GANTT creator");
 		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.getContentPane().setBackground(new Color(153, 180, 209));
-		frame.setBounds(0, 0, size.width, size.height-40);
+		frame.setBounds(0, 0, 1366, 393);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -138,9 +138,10 @@ public class GANTT_constructor{
 		 * Creates the text pane responsible for providing information on all processes hosted in host files. 
 		 */		
 		TextArea GANTTTaskTextArea = new TextArea("Press refresh to get all info from your files.");
-		GANTTTaskTextArea.setBounds(10, 359, 1330, 162);
+		GANTTTaskTextArea.setBounds(10, 47, 1330, 162);
 		GANTTTaskTextArea.setEditable(false);
 		JScrollPane scroll = new JScrollPane();
+		scroll.setLocation(0, -312);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.getContentPane().add(scroll);
 		frame.getContentPane().add(GANTTTaskTextArea);
@@ -150,7 +151,7 @@ public class GANTT_constructor{
 		 */
 		String[] availableMetric = {"Hours", "Days", "Weeks", "Months" };
 		JComboBox<Object> dur_metric = new JComboBox<Object>(availableMetric);
-		dur_metric.setBounds(1001, 582, 70, 20);
+		dur_metric.setBounds(1001, 270, 70, 20);
 		frame.getContentPane().add(dur_metric);
 		
 	/**
@@ -231,20 +232,8 @@ public class GANTT_constructor{
 				}
 			}}});
 		
-		btnAdd.setBounds(14, 623, 114, 23);
+		btnAdd.setBounds(14, 311, 114, 23);
 		frame.getContentPane().add(btnAdd);{}
-
-	/**
-	 * Responsible for saving an image of the created chart from the Jframe once it has been initialised
-	 *@returns returns an image, saved to the user's hard disk.
-	 */
-	JButton btnSave = new JButton("Save image");
-	btnSave.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
-		}
-	});
 	
 	/**
 	 * Shortcut to take the user home
@@ -256,7 +245,7 @@ public class GANTT_constructor{
 			frame.dispose();
 		}
 	});
-	btnHome.setBounds(10, 325, 70, 23);
+	btnHome.setBounds(10, 13, 70, 23);
 	frame.getContentPane().add(btnHome);
 	
 	/**
@@ -286,12 +275,9 @@ public class GANTT_constructor{
 			}
 	});
 			
-	btnCreate.setBounds(1226, 325, 114, 23);
+	btnCreate.setBounds(1226, 13, 114, 23);
 	frame.getContentPane().add(btnCreate);
 	
-	btnSave.setBounds(90, 325, 114, 23);
-	frame.getContentPane().add(btnSave);
-
 	/**
 	 * Button which, when pressed, gains information stored in both the key and the info files, puts them together and displays them in a well-formatted manner
 	 * 
@@ -328,7 +314,7 @@ public class GANTT_constructor{
 				GANTTTaskTextArea.append(i);
 		}}catch (Exception RefreshProblem){}
 	}});
-	btnRefresh_1.setBounds(1226, 532, 114, 23);
+	btnRefresh_1.setBounds(1226, 220, 114, 23);
 	frame.getContentPane().add(btnRefresh_1);
 		
 	/**
@@ -367,25 +353,25 @@ public class GANTT_constructor{
 			}
 		}
 	}});
-	btnRemove.setBounds(138, 623, 114, 23);
+	btnRemove.setBounds(138, 311, 114, 23);
 	frame.getContentPane().add(btnRemove);
 	
 	/** 
 	 * Initiates text fields and descriptions for the purposes of aesthetics.
 	 */
 	txtID = new JTextField();
-	txtID.setBounds(10, 582, 86, 20);
+	txtID.setBounds(10, 270, 86, 20);
 	frame.getContentPane().add(txtID);
 	txtID.setColumns(10);
 		
 	txtDesc = new JTextField();
 	txtDesc.setColumns(10);
-	txtDesc.setBounds(116, 582, 425, 20);
+	txtDesc.setBounds(116, 270, 425, 20);
 	frame.getContentPane().add(txtDesc);
 		
 	dur = new JTextField();
 	dur.setColumns(10);
-	dur.setBounds(969, 581, 32, 21);
+	dur.setBounds(969, 269, 32, 21);
 	frame.getContentPane().add(dur);
 		
 	txtTaskId = new JTextField();
@@ -393,7 +379,7 @@ public class GANTT_constructor{
 	txtTaskId.setEditable(false);
 	txtTaskId.setBorder(null);
 	txtTaskId.setBackground(new Color(0,0,0,0));
-	txtTaskId.setBounds(10, 566, 86, 20);
+	txtTaskId.setBounds(10, 254, 86, 20);
 	frame.getContentPane().add(txtTaskId);
 	txtTaskId.setColumns(10);
 		
@@ -403,7 +389,7 @@ public class GANTT_constructor{
 	txtDescription.setBorder(null);
 	txtDescription.setBackground(new Color(0,0,0,0));
 	txtDescription.setColumns(10);
-	txtDescription.setBounds(116, 566, 94, 20);
+	txtDescription.setBounds(116, 254, 94, 20);
 	frame.getContentPane().add(txtDescription);
 		
 	txtStartDate = new JTextField();
@@ -412,7 +398,7 @@ public class GANTT_constructor{
 	txtStartDate.setBorder(null);
 	txtStartDate.setBackground(new Color(0,0,0,0));
 	txtStartDate.setColumns(10);
-	txtStartDate.setBounds(551, 558, 86, 36);
+	txtStartDate.setBounds(551, 246, 86, 36);
 	frame.getContentPane().add(txtStartDate);
 		
 	txtEndDate = new JTextField();
@@ -421,7 +407,7 @@ public class GANTT_constructor{
 	txtEndDate.setBorder(null);
 	txtEndDate.setBackground(new Color(0,0,0,0));
 	txtEndDate.setColumns(10);
-	txtEndDate.setBounds(759, 558, 86, 36);
+	txtEndDate.setBounds(759, 246, 86, 36);
 	frame.getContentPane().add(txtEndDate);
 		
 	txtDuration = new JTextField();
@@ -430,22 +416,22 @@ public class GANTT_constructor{
 	txtDuration.setBorder(null);
 	txtDuration.setBackground(new Color(0,0,0,0));
 	txtDuration.setColumns(10);
-	txtDuration.setBounds(969, 558, 86, 36);
+	txtDuration.setBounds(969, 246, 86, 36);
 	frame.getContentPane().add(txtDuration);
 		
 	endDate = new JTextField();
 	endDate.setColumns(10);
-	endDate.setBounds(759, 581, 200, 21);
+	endDate.setBounds(759, 269, 200, 21);
 	frame.getContentPane().add(endDate);			
 		
 	startDate = new JTextField();
 	startDate.setColumns(10);
-	startDate.setBounds(551, 581, 200, 21);
+	startDate.setBounds(551, 269, 200, 21);
 	frame.getContentPane().add(startDate);
 	
 	PreField = new JTextField();
 	PreField.setColumns(10);
-	PreField.setBounds(1097, 582, 70, 21);
+	PreField.setBounds(1097, 270, 70, 21);
 	frame.getContentPane().add(PreField);
 	
 	txtPredecessor = new JTextField();
@@ -454,8 +440,16 @@ public class GANTT_constructor{
 	txtPredecessor.setColumns(10);
 	txtPredecessor.setBorder(null);
 	txtPredecessor.setBackground(new Color(0, 0, 0, 0));
-	txtPredecessor.setBounds(1098, 558, 86, 36);
+	txtPredecessor.setBounds(1098, 246, 86, 36);
 	frame.getContentPane().add(txtPredecessor);
 	
+	}
+	
+	public File returnOrig(){
+		return origFile;
+	}
+	
+	public File returnInfo(){
+		return infoFile;
 	}
 {}}
